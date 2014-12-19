@@ -14,7 +14,7 @@ import java.util.Comparator;
 public class Heap<T> implements PriorityQueue<T> {
 
     private T[] heap;
-    private Comparator<T> comparator;
+    private Comparator<? super T> comparator;
     private int count;
 
     public static final int DEFAULT_INITIAL_CAPACITY = 32;
@@ -25,7 +25,7 @@ public class Heap<T> implements PriorityQueue<T> {
      *
      * @param comparator The comparator for the elements.
      */
-    public Heap(Comparator<T> comparator) {
+    public Heap(Comparator<? extends T> comparator) {
         this(comparator, DEFAULT_INITIAL_CAPACITY);
     }
 
@@ -37,7 +37,7 @@ public class Heap<T> implements PriorityQueue<T> {
      * @param initialCapacity The initial capacity of the heap.
      */
     @SuppressWarnings("unchecked")
-    public Heap(Comparator<T> comparator, int initialCapacity) {
+    public Heap(Comparator<? super T> comparator, int initialCapacity) {
         this.heap = (T[]) new Object[initialCapacity];
         this.comparator = comparator;
         this.count = 0;
@@ -51,7 +51,7 @@ public class Heap<T> implements PriorityQueue<T> {
      * @param comparator The comparator for the elements.
      * @param elements The element array to heapify.
      */
-    public Heap(Comparator<T> comparator, T[] elements) {
+    public Heap(Comparator<? super T> comparator, T[] elements) {
         this.heap = elements;
         this.comparator = comparator;
         this.count = elements.length;
