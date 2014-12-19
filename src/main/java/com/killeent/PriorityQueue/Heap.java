@@ -45,14 +45,13 @@ public class Heap<T> implements PriorityQueue<T> {
 
     /**
      * Builds a heap given the specified comparator and element array. The element
-     * array is used internally and should not be modified after a call to buildHeap
-     * except through main.PriorityQueue API functions.
+     * array is used internally and should not be modified after a call to this constructor
+     * except through PriorityQueue API functions.
      *
      * @param comparator The comparator for the elements.
      * @param elements The element array to heapify.
-     * @return
      */
-    public Heap<T> buildHeap(Comparator<T> comparator, T[] elements) {
+    public Heap(Comparator<T> comparator, T[] elements) {
         this.heap = elements;
         this.comparator = comparator;
         this.count = elements.length;
@@ -61,7 +60,6 @@ public class Heap<T> implements PriorityQueue<T> {
         for(int i = count - 1; i >= 0; i--) {
             bubbleDown(i);
         }
-        return this;
     }
 
     @Override

@@ -196,6 +196,15 @@ public class HeapTest {
         assertExpectedHeapRemoval(heap2, expected);
     }
 
+    // tests the "build heap" Heap constructor
+    @Test
+    public void testBuildHeap() {
+        String[] toBeHeaped = new String[]{"a", "f", "g", "d", "e", "r"};
+        String[] expected = new String[]{"a", "d", "e", "f", "g", "r"};
+        PriorityQueue<String> heap = new Heap<String>(new StringComparator(), toBeHeaped);
+        assertExpectedHeapRemoval(heap, expected);
+    }
+
     private class StringComparator implements Comparator<String> {
 
         /**
