@@ -16,7 +16,25 @@ public class ArraySort {
      * @param comparator The comparator to use when sorting.
      */
     public static <T> void quickSort(T[] array, Comparator<? super T> comparator) {
+        quickSort(array, comparator, 0, array.length);
+    }
 
+    /**
+     * Sorts the elements of the array from lo to hi-1.
+     *
+     * @param array The array to sort.
+     * @param comparator The comparator to use when sorting.
+     * @param lo The low (inclusive) index of the array range to sort.
+     * @param hi The high (exclusive) index of the array range to sort.
+     */
+    private static <T> void quickSort(
+            T[] array, Comparator<? super T> comparator, int lo, int hi) {
+       if (hi - lo > 1) {
+           int pivot = genPivot(array, comparator, lo, hi);
+           int partition = partition(array, comparator, pivot, lo, hi);
+           quickSort(array, comparator, lo, partition);
+           quickSort(array, comparator, partition + 1, hi);
+       }
     }
 
     /**
@@ -39,16 +57,21 @@ public class ArraySort {
 
         int index = lo;
         int countBigger = 0;
-        while (index != hi - 2 - countBigger) {
-            if (comparator.compare(array[lo], partitionVal) <= 0) {
+        // array: [lo ... index - 1 <= partition | index ... hi - 2 - countBigger unknown
+        // | hi - 1 - countBigger ... hi - 1 > partition | hi - 1 the partition value]
+        while (index != hi - 1 - countBigger) {
+            if (comparator.compare(array[index], partitionVal) <= 0) {
                 // value is lower than partition
                 index++;
             } else {
                 // value is higher than partition
-                swap(array, lo, hi - );
                 countBigger++;
+                swap(array, index, hi - 1 - countBigger);
             }
         }
+        // place partition in middle
+        swap(array, index, hi - 1);
+        return index;
     }
 
     /**

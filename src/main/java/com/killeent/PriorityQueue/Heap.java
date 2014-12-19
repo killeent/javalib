@@ -25,7 +25,7 @@ public class Heap<T> implements PriorityQueue<T> {
      *
      * @param comparator The comparator for the elements.
      */
-    public Heap(Comparator<? extends T> comparator) {
+    public Heap(Comparator<? super T> comparator) {
         this(comparator, DEFAULT_INITIAL_CAPACITY);
     }
 
