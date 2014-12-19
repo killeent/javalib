@@ -4,5 +4,10 @@ Data Structures:
 
 Algorithms:
 
+Arrays:
+  - quicksort
+  - binary search
+  - first occurrence
+
 Math:
   - power
