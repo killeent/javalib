@@ -21,9 +21,9 @@ public class ArraySearch {
      */
     public static <T> int binarySearch(T[] array, Comparator<? super T> comparator, T value) {
         int lo = 0;
-        int hi = array.length;
+        int hi = array.length - 1;
 
-        while (hi - lo > 0) {
+        while (hi - lo >= 0) {
             int mid = hi - ((hi - lo) / 2);
             int relation = comparator.compare(array[mid], value);
             if (relation < 0) {
@@ -34,7 +34,7 @@ public class ArraySearch {
                 return mid;
             } else {
                 // a[mid] > value, search lower half of array
-                hi = mid;
+                hi = mid - 1;
             }
         }
         // not found
