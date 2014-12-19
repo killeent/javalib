@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.util.*;
 
 /**
- * A simple test class for the binary heap.
+ * A simple test class for the binary heap {@link com.killeent.PriorityQueue.Heap}.
  *
  * @author Trevor Killeen (2014)
  *
