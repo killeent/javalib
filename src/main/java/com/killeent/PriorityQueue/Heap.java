@@ -9,7 +9,7 @@ import java.util.Comparator;
  * An element A has a priority greater than element B iff the compareTo function returns a positive
  * number.
  *
- * @author Trevor Killeen
+ * @author Trevor Killeen (2014)
  */
 public class Heap<T> implements PriorityQueue<T> {
 

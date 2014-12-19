@@ -6,6 +6,8 @@ import org.junit.Test;
 
 /**
  * Test class for the Math library {@link com.killeent.Math.Math}.
+ *
+ * @author Trevor Killeen (2014)
  */
 public class MathTest {
 

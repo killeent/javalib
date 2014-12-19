@@ -9,14 +9,16 @@ import java.util.Comparator;
 
 /**
  * Tests for {@link com.killeent.Array.ArraySort}.
+ *
+ * @author Trevor Killeen (2014)
  */
 public class ArraySortTest {
 
-    private IntegerComparator integerComparator;
+    private TestUtil.IntegerComparator integerComparator;
 
     @Before
     public void setUp() {
-        integerComparator = new IntegerComparator();
+        integerComparator = new TestUtil.IntegerComparator();
     }
 
     /**
@@ -115,17 +117,4 @@ public class ArraySortTest {
         ArraySort.quickSort(input, integerComparator);
         Assert.assertArrayEquals(expected, input);
     }
-
-
-    /**
-     * Simple integer comparator.
-     */
-    private class IntegerComparator implements Comparator<Integer> {
-
-        @Override
-        public int compare(Integer o1, Integer o2) {
-            return o1 - o2;
-        }
-    }
-
 }
