@@ -270,4 +270,73 @@ public class ArrayTest {
         Assert.assertEquals(new Integer(9), Array.kthSmallestElement(input, integerComparator, 10));
 
     }
+
+    /**
+     * Test for {@link com.killeent.Array.Array#inversions}.
+     */
+
+    /**
+     * Tests for 0 inversions in an empty array.
+     */
+
+    @Test
+    public void testInversionsEmptyArray() {
+        Integer[] input = new Integer[0];
+        Assert.assertEquals(0, Array.inversions(input, integerComparator));
+    }
+
+    /**
+     * Tests for 0 inversions in a single element array.
+     */
+    @Test
+    public void testInversionsSingleElementArray() {
+        Integer[] input = new Integer[]{1};
+        Assert.assertEquals(0, Array.inversions(input, integerComparator));
+    }
+
+    /**
+     * Tests for 0 inversions in a sorted array.
+     */
+    @Test
+    public void testInversionsSortedArray() {
+        Integer[] input = new Integer[]{1, 2};
+        Assert.assertEquals(0, Array.inversions(input, integerComparator));
+        input = new Integer[]{1, 2, 3, 4, 5};
+        Assert.assertEquals(0, Array.inversions(input, integerComparator));
+        input = new Integer[]{1, 2, 2, 3, 3, 4, 4, 4, 4, 4, 5, 5, 6};
+        Assert.assertEquals(0, Array.inversions(input, integerComparator));
+    }
+
+    /**
+     * Tests for 0 inversions in an array with all of the same element.
+     */
+    @Test
+    public void testInversionsSameElementArray() {
+        Integer[] input = new Integer[]{1, 1, 1, 1, 1};
+        Assert.assertEquals(0, Array.inversions(input, integerComparator));
+    }
+
+    /**
+     * Tests for finding all possible inversions in a reverse sorted array. This
+     * is (n choose 2) where n is the number of elements in the array.
+     */
+    @Test
+    public void testInversionsReverseSortedArray() {
+        Integer[] input = new Integer[]{3, 2, 1};
+        Assert.assertEquals(3, Array.inversions(input, integerComparator));
+        input = new Integer[]{5, 4, 3, 2, 1};
+        Assert.assertEquals(10, Array.inversions(input, integerComparator));
+        input = new Integer[]{9, 8, 7, 6, 5, 4, 3, 2, 1};
+        Assert.assertEquals(36, Array.inversions(input, integerComparator));
+    }
+
+    /**
+     * Tests finding inversions from an array with various sequences of increasing
+     * and decreasing values.
+     */
+    @Test
+    public void testInversionsComplexArray() {
+        Integer[] input = new Integer[]{4, 5, 3, 7, 4, 5, 1, 2, 10};
+        Assert.assertEquals(17, Array.inversions(input, integerComparator));
+    }
 }

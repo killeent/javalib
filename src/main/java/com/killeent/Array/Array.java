@@ -225,8 +225,7 @@ public class Array {
         }
 
         // make a copy of the array so we don't mutate the input
-        T[] copy = (T[]) new Object[array.length];
-        copyArray(array, copy);
+        T[] copy = copyArray(array);
 
         Random r = new Random();
         return kthSmallestElement(copy, comparator, r, k, 0, array.length);
@@ -270,14 +269,98 @@ public class Array {
     }
 
     /**
-     * Utility function to copy the contents of one array to another.
+     * Utility function to create a new array that has a copy the contents of another.
      */
-    private static <T> void copyArray(T[] src, T[] dst) {
-        if (src.length > dst.length) {
-            throw new IllegalArgumentException("Not enough room in dst for src contents");
-        }
+    @SuppressWarnings("unchecked") // we are simply making a copy of an array with a defined type
+    private static <T> T[] copyArray(T[] src) {
+        T[] dst = (T[]) new Object[src.length];
         for (int i = 0; i < src.length; i++) {
             dst[i] = src[i];
+        }
+        return dst;
+    }
+
+    /**
+     * Counts the number of inversions in the array. An inversion is a pair of
+     * indices i, j with i != j and A[j] < A[i].
+     *
+     * @param array The array to search through.
+     * @param comparator Comparator to use to compare elements.
+     * @return The number of inversions in the given array.
+     */
+    public static <T> int inversions(T[] array, Comparator<? super T> comparator) {
+        T[] copy = copyArray(array);
+        return inversions(copy, comparator, 0, array.length);
+    }
+
+    /**
+     * Recursive helper function to count inversions while merge sorting an array.
+     *
+     * @param array The array to sort and count inversions in.
+     * @param comparator Comparator to use to compare elements.
+     * @param lo The low (inclusive) index of the array range to consider.
+     * @param hi The high (exclusive) index of the array range to consider.
+     * @return The number of inversions in array[lo ... hi-1]
+     */
+    @SuppressWarnings("unchecked") // making a copy of a generic array of the same type
+    private static <T> int inversions(T[] array, Comparator<? super T> comparator, int lo, int hi) {
+        if (lo >= hi - 1) {
+            return 0;
+        } else {
+            int mid = (lo + hi) / 2;
+            int inversions =
+                    inversions(array, comparator, lo, mid) + inversions(array, comparator, mid, hi);
+
+            T[] aux = (T[]) new Object[hi - lo];
+            int i = lo;
+            int j = mid;
+            int k = 0;
+
+            // merge the arrays, counting inversions as we go
+            while (i < mid && j < hi) {
+                if (comparator.compare(array[i], array[j]) <= 0) {
+                    // not an inversion, simply copy it to the auxiliary array
+                    aux[k] = array[i];
+                    i++;
+                } else {
+                    // an inversion because array[i] > array[j]. Copy array[j] to the
+                    // aux array and increment the inversion count by 1
+                    aux[k] = array[j];
+                    j++;
+                    inversions++;
+                }
+                k++;
+            }
+
+            // any remaining elements in array[lo ... mid-1] are greater than all elements
+            // in array[mid ... hi - 1], so for each element copy it to the aux array and
+            // increment inversions by hi - mid. Note that we consider the element at i++ -
+            // element i has already been compared to elements in array[mid ... hi - 1]
+            if (i < mid) {
+                aux[k] = array[i];
+                i++;
+                k++;
+            }
+
+            while (i < mid) {
+                aux[k] = array[i];
+                i++;
+                k++;
+                inversions += hi - mid;
+            }
+
+            // otherwise just copy over the elements in the upper half
+            while (j < hi) {
+                aux[k] = array[j];
+                j++;
+                k++;
+            }
+
+            // now copy back the elements into the original array, and return
+            for (int l = 0; l < hi - lo; l++) {
+                array[lo + l] = aux[l];
+            }
+            return inversions;
         }
     }
 }
