@@ -68,4 +68,57 @@ public class MathTest {
         Assert.assertEquals(-1.0/27, Math.power(-3, -3), POWER_EPSILON);
     }
 
+    /**
+     * Tests for {@link com.killeent.Math.Math#binomialCoefficient}.
+     */
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if n is negative.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testBinomialCoefficientNegativeN() {
+        Math.binomialCoefficient(-1, 0);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if k is negative.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testBinomialCoefficientNegativeK() {
+        Math.binomialCoefficient(0, -1);
+    }
+
+    /**
+     * Tests for 0 when k > n.
+     */
+    @Test
+    public void testBinomialCoefficientKBiggerThanN() {
+        Assert.assertEquals(0, Math.binomialCoefficient(0, 1));
+    }
+
+    /**
+     * Tests for 1 when k = n.
+     */
+    @Test
+    public void testBinomialCoefficientKEqualsN() {
+        Assert.assertEquals(1, Math.binomialCoefficient(1, 1));
+        Assert.assertEquals(1, Math.binomialCoefficient(10, 10));
+        Assert.assertEquals(1, Math.binomialCoefficient(1000, 1000));
+    }
+
+    /**
+     * Tests a range of k values for the binomial coefficient.
+     */
+    @Test
+    public void testBinomialCoefficientKRange() {
+        Assert.assertEquals(1, Math.binomialCoefficient(6, 0));
+        Assert.assertEquals(6, Math.binomialCoefficient(6, 1));
+        Assert.assertEquals(15, Math.binomialCoefficient(6, 2));
+        Assert.assertEquals(20, Math.binomialCoefficient(6, 3));
+        Assert.assertEquals(15, Math.binomialCoefficient(6, 4));
+        Assert.assertEquals(6, Math.binomialCoefficient(6, 5));
+        Assert.assertEquals(1, Math.binomialCoefficient(6, 6));
+    }
+
+
 }

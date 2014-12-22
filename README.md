@@ -13,3 +13,4 @@ Arrays:
 
 Math:
   - power
+  - binomial coefficient
