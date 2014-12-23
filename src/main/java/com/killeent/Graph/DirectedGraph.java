@@ -8,7 +8,7 @@ import java.util.*;
  *
  * @author Trevor Killeen (2014)
  */
-public class SimpleDirectedGraph<V extends Comparable<V>> implements LabeledGraph<V> {
+public class DirectedGraph<V extends Comparable<V>> implements SimpleLabeledGraph<V> {
 
     // We implement the graph using a Hash Table and adjacency list. Every vertex in the
     // graph is unique and maps to a list of edges, which represent edges from that vertex
@@ -16,7 +16,7 @@ public class SimpleDirectedGraph<V extends Comparable<V>> implements LabeledGrap
 
     private final Map<V, List<Edge<V>>> graph;
 
-    public SimpleDirectedGraph() {
+    public DirectedGraph() {
         graph = new HashMap<V, List<Edge<V>>>();
     }
 
@@ -77,6 +77,9 @@ public class SimpleDirectedGraph<V extends Comparable<V>> implements LabeledGrap
         }
         if (!graph.containsKey(vertexB)) {
             throw new IllegalArgumentException("vertexB not in the graph");
+        }
+        if (vertexA == vertexB) {
+            throw new IllegalArgumentException("no self loops");
         }
         return graph.get(vertexA).remove(new Edge<V>(vertexA, vertexB));
     }

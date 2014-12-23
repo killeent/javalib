@@ -5,12 +5,13 @@ import java.util.Set;
 
 /**
  * A Graph G = (V, E) is a set of vertices V together with a set of edges E of ordered
- * or unordered pairs of vertices from V. This interface defines an unweighted, labeled Graph,
- * that is one where edges have no cost distinction and the vertices are unique.
+ * or unordered pairs of vertices from V. This interface defines a simple, unweighted, labeled
+ * Graph, that is one with no self or multi- edges, edges have no cost distinction and the
+ * vertices are unique.
  *
  * @author Trevor Killeen (2014)
  */
-public interface LabeledGraph<V extends Comparable<V>> {
+public interface SimpleLabeledGraph<V extends Comparable<V>> {
 
     /**
      * Adds the specified vertex to the Graph if it does not already exist.
@@ -36,6 +37,8 @@ public interface LabeledGraph<V extends Comparable<V>> {
      * @param vertexB The destination vertex.
      * @throws java.lang.IllegalArgumentException if vertexA or vertexB is null.
      * @throws java.lang.IllegalArgumentException is vertexA or vertexB is not in the Graph.
+     * @throws java.lang.IllegalArgumentException if vertexA == vertexB or if there is
+     * already an edge from A to B in the Graph.
      */
     void addEdge(V vertexA, V vertexB);
 
@@ -54,7 +57,7 @@ public interface LabeledGraph<V extends Comparable<V>> {
      *
      * @param vertexA The source vertex.
      * @param vertexB The destination vertex.
-     * @throws java.lang.IllegalArgumentException if vertexA, vertexB or edge is null.
+     * @throws java.lang.IllegalArgumentException if vertexA or vertexB is null.
      * @return True if the graph contained the edge and it was removed, otherwise false if the
      * graph did not contain the edge.
      */
