@@ -57,6 +57,17 @@ public class SimpleDirectedGraph<V extends Comparable<V>> implements LabeledGrap
     }
 
     @Override
+    public boolean containsEdge(V vertexA, V vertexB) {
+        if (vertexA == null || vertexB == null) {
+            throw new IllegalArgumentException("arguments cannot be null");
+        }
+        if (!graph.containsKey(vertexA) || !graph.containsKey(vertexB)) {
+            return false;
+        }
+        return graph.get(vertexA).contains(new Edge<V>(vertexA, vertexB));
+    }
+
+    @Override
     public boolean removeEdge(V vertexA, V vertexB) {
         if (vertexA == null || vertexB == null) {
             throw new IllegalArgumentException("arguments cannot be null");
@@ -67,8 +78,7 @@ public class SimpleDirectedGraph<V extends Comparable<V>> implements LabeledGrap
         if (!graph.containsKey(vertexB)) {
             throw new IllegalArgumentException("vertexB not in the graph");
         }
-        Collection<Edge<V>> edges = graph.get(vertexA);
-        return edges.remove(new Edge<V>(vertexA, vertexB));
+        return graph.get(vertexA).remove(new Edge<V>(vertexA, vertexB));
     }
 
     @Override
@@ -85,5 +95,10 @@ public class SimpleDirectedGraph<V extends Comparable<V>> implements LabeledGrap
     @Override
     public Set<V> vertices() {
         return Collections.unmodifiableSet(graph.keySet());
+    }
+
+    @Override
+    public void clear() {
+        graph.clear();
     }
 }

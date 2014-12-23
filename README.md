@@ -1,6 +1,8 @@
 Data Structures:
 
 -- Binary Heap
+-- Graph
+  - unweighted, directed
 
 Algorithms:
 

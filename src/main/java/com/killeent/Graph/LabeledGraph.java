@@ -34,10 +34,20 @@ public interface LabeledGraph<V extends Comparable<V>> {
      *
      * @param vertexA The source vertex.
      * @param vertexB The destination vertex.
-     * @throws java.lang.IllegalArgumentException if vertexA, vertexB or edge is null.
+     * @throws java.lang.IllegalArgumentException if vertexA or vertexB is null.
      * @throws java.lang.IllegalArgumentException is vertexA or vertexB is not in the Graph.
      */
     void addEdge(V vertexA, V vertexB);
+
+    /**
+     * Checks to see if the specified vertex is in the Graph.
+     *
+     * @param vertexA The source vertex.
+     * @param vertexB The destination vertex.
+     * @throws java.lang.IllegalArgumentException if vertexA or vertexB is null.
+     * @return True if there is an edge between A and B in the Graph, otherwise false.
+     */
+    boolean containsEdge(V vertexA, V vertexB);
 
     /**
      * Removes an edge between vertex A and vertex B if it exists.
@@ -65,4 +75,8 @@ public interface LabeledGraph<V extends Comparable<V>> {
      */
     Set<V> vertices();
 
+    /**
+     * Removes all nodes and edges from the Graph.
+     */
+    void clear();
 }
