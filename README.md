@@ -13,6 +13,9 @@ Arrays:
   - kth smallest element
   - count inversions
 
+Graphs:
+  - shortest path (BFS)
+
 Math:
   - power
   - binomial coefficient

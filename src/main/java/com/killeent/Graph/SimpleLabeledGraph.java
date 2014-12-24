@@ -69,12 +69,12 @@ public interface SimpleLabeledGraph<V extends Comparable<V>> {
      * @param vertex The vertex to consider.
      * @throws java.lang.NullPointerException if vertex is null.
      * @throws java.lang.IllegalArgumentException is vertex is not in the graph.
-     * @return A collection of all edges connected to the passed vertex.
+     * @return An unmodifiable collection of all edges connected to the passed vertex.
      */
     Collection<Edge<V>> neighbors(V vertex);
 
     /**
-     * @return A set of all the vertices in the Graph.
+     * @return A unmodifiable set of all the vertices in the Graph.
      */
     Set<V> vertices();
 
