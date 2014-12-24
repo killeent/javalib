@@ -49,6 +49,9 @@ public class DirectedGraph<V extends Comparable<V>> implements SimpleLabeledGrap
         if (!graph.containsKey(vertexB)) {
             throw new IllegalArgumentException("vertexB not in the graph");
         }
+        if (vertexA == vertexB) {
+            throw new IllegalArgumentException("no self edges allowed");
+        }
         Collection<Edge<V>> edges = graph.get(vertexA);
         Edge<V> candidate = new Edge<V>(vertexA, vertexB);
         if (!edges.contains(candidate)) {
@@ -77,9 +80,6 @@ public class DirectedGraph<V extends Comparable<V>> implements SimpleLabeledGrap
         }
         if (!graph.containsKey(vertexB)) {
             throw new IllegalArgumentException("vertexB not in the graph");
-        }
-        if (vertexA == vertexB) {
-            throw new IllegalArgumentException("no self loops");
         }
         return graph.get(vertexA).remove(new Edge<V>(vertexA, vertexB));
     }

@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public abstract class BaseSimpleLabeledGraphTest {
 
-    private SimpleLabeledGraph<Integer> instance;
+    protected SimpleLabeledGraph<Integer> instance;
 
     protected abstract SimpleLabeledGraph<Integer> createInstance();
 
@@ -79,7 +79,8 @@ public abstract class BaseSimpleLabeledGraphTest {
     }
 
     /**
-     * Illegal argument tests for {@link com.killeent.Graph.SimpleLabeledGraph#containsEdge},
+     * Illegal argument tests for {@link com.killeent.Graph.SimpleLabeledGraph#addEdge},
+     * {@link com.killeent.Graph.SimpleLabeledGraph#containsEdge},
      * {@link com.killeent.Graph.SimpleLabeledGraph#removeEdge} and
      * {@link com.killeent.Graph.SimpleLabeledGraph#neighbors}.
      *
@@ -117,7 +118,7 @@ public abstract class BaseSimpleLabeledGraphTest {
 
     /**
      * Tests for {@link java.lang.IllegalArgumentException} when trying to add an edge
-     * from a missing vertex.
+     * to a missing vertex.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphAddEdgeMissingB() {
@@ -153,6 +154,57 @@ public abstract class BaseSimpleLabeledGraphTest {
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphContainsEdgeNullB() {
         instance.containsEdge(1, null);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when trying to remove an edge
+     * from null.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testLabeledGraphRemoveEdgeNullA() {
+        instance.removeEdge(null, 1);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when trying to remove an edge
+     * to null.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testLabeledGraphRemoveEdgeNullB() {
+        instance.removeEdge(null, 1);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when trying to remove an edge
+     * from a missing vertex.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testLabeledGraphRemoveEdgeMissingA() {
+        instance.addVertex(2);
+        instance.removeEdge(1, 2);
+        instance.clear();
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when trying to remove an edge
+     * to a missing vertex.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testLabeledGraphRemoveEdgeMissingB() {
+        instance.addVertex(1);
+        instance.removeEdge(1, 2);
+        instance.clear();
+    }
+
+    /**
+     * Tests that removing an nonexistent edge returns false.
+     */
+    @Test
+    public void testLabeledGraphRemoveNonexistentEdge() {
+        instance.addVertex(1);
+        instance.addVertex(2);
+        Assert.assertFalse(instance.removeEdge(1, 2));
+        instance.clear();
     }
 
     /**
