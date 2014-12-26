@@ -18,7 +18,7 @@ public class GraphSearch {
      * @param end The node to find the shortest path to.
      * @param path An output parameter where the shortest path will be stored in one
      *             exists.
-     * @return True if start and end are connected, otherwise false. 
+     * @return True if start and end are connected, otherwise false.
      */
     public static <V extends Comparable<V>> boolean shortestPath(
             SimpleLabeledGraph<V> g, V start, V end, List<Edge<V>> path) {
