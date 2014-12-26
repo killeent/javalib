@@ -2,25 +2,26 @@ package com.killeent;
 
 import com.killeent.Graph.Edge;
 import com.killeent.Graph.SimpleLabeledGraph;
-import com.killeent.Graph.DirectedHashGraph;
+import com.killeent.Graph.UndirectedHashGraph;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Collection;
 
 /**
- * Tests for the {@link com.killeent.Graph.DirectedGraph}.
+ * Tests for the {@link com.killeent.Graph.UndirectedGraph};
  *
  * @author Trevor Killeen (2014)
  */
-public class DirectedGraphTest extends BaseSimpleLabeledGraphTest {
+public class UndirectedGraphTest extends BaseSimpleLabeledGraphTest {
+
     @Override
     protected SimpleLabeledGraph<Integer, Integer> createInstance() {
-        return new DirectedHashGraph<Integer, Integer>();
+        return new UndirectedHashGraph<Integer, Integer>();
     }
 
     /**
-     * Tests specific to the {@link com.killeent.Graph.DirectedHashGraph}.
+     * Tests specific to the {@link com.killeent.Graph.UndirectedGraph}.
      */
 
     /**
@@ -33,24 +34,10 @@ public class DirectedGraphTest extends BaseSimpleLabeledGraphTest {
      * Tests adding a single edge in the graph.
      */
     @Test
-    public void testDirectedGraphAddSingleEdge() {
+    public void testUndirectedGraphAddSingleEdge() {
         instance.addVertex(1);
         instance.addVertex(2);
         instance.addEdge(1, 2, 0);
-        Assert.assertTrue(instance.containsEdge(1, 2, 0));
-        Assert.assertFalse(instance.containsEdge(2, 1, 0));
-        instance.clear();
-    }
-
-    /**
-     * Tests adding an edge in both directions to the graph.
-     */
-    @Test
-    public void testDirectedGraphAddBidirectionalEdge() {
-        instance.addVertex(1);
-        instance.addVertex(2);
-        instance.addEdge(1, 2, 0);
-        instance.addEdge(2, 1, 0);
         Assert.assertTrue(instance.containsEdge(1, 2, 0));
         Assert.assertTrue(instance.containsEdge(2, 1, 0));
         instance.clear();
@@ -60,29 +47,16 @@ public class DirectedGraphTest extends BaseSimpleLabeledGraphTest {
      * Tests adding multiple outgoing edges to the graph.
      */
     @Test
-    public void testDirectedGraphAddMultipleOutEdges() {
+    public void testUndirectedGraphAddMultipleOutEdges() {
         instance.addVertex(1);
         instance.addVertex(2);
         instance.addVertex(3);
         instance.addEdge(1, 2, 0);
         instance.addEdge(1, 3, 0);
         Assert.assertTrue(instance.containsEdge(1, 2, 0));
+        Assert.assertTrue(instance.containsEdge(2, 1, 0));
         Assert.assertTrue(instance.containsEdge(1, 3, 0));
-        instance.clear();
-    }
-
-    /**
-     * Tests adding multiple ingoing edges to the graph.
-     */
-    @Test
-    public void testDirectedGraphAddMultipleInEdges() {
-        instance.addVertex(1);
-        instance.addVertex(2);
-        instance.addVertex(3);
-        instance.addEdge(1, 3, 0);
-        instance.addEdge(2, 3, 0);
-        Assert.assertTrue(instance.containsEdge(1, 3, 0));
-        Assert.assertTrue(instance.containsEdge(2, 3, 0));
+        Assert.assertTrue(instance.containsEdge(3, 1, 0));
         instance.clear();
     }
 
@@ -90,30 +64,15 @@ public class DirectedGraphTest extends BaseSimpleLabeledGraphTest {
      * Tests removing a single edge.
      */
     @Test
-    public void testDirectedGraphRemoveEdge() {
+    public void testUndirectedGraphRemoveEdge() {
         instance.addVertex(1);
         instance.addVertex(2);
         instance.addEdge(1, 2, 0);
         Assert.assertTrue(instance.containsEdge(1, 2, 0));
-        Assert.assertTrue(instance.removeEdge(1, 2, 0));
-        Assert.assertFalse(instance.containsEdge(2, 1, 0));
-        instance.clear();
-    }
-
-    /**
-     * Tests that removing an edge in one direction does not remove an edge in both.
-     */
-    @Test
-    public void testDirectedGraphRemoveOneDirectionOfEdge() {
-        instance.addVertex(1);
-        instance.addVertex(2);
-        instance.addEdge(1, 2, 0);
-        instance.addEdge(2, 1, 0);
-        Assert.assertTrue(instance.containsEdge(1, 2, 0));
         Assert.assertTrue(instance.containsEdge(2, 1, 0));
         Assert.assertTrue(instance.removeEdge(1, 2, 0));
-        Assert.assertTrue(instance.containsEdge(2, 1, 0));
         Assert.assertFalse(instance.containsEdge(1, 2, 0));
+        Assert.assertFalse(instance.containsEdge(2, 1, 0));
         instance.clear();
     }
 
@@ -143,10 +102,20 @@ public class DirectedGraphTest extends BaseSimpleLabeledGraphTest {
         instance.addVertex(3);
         instance.addEdge(1, 2, 0);
         instance.addEdge(1, 3, 0);
+
         Collection<Edge<Integer, Integer>> neighbors = instance.neighbors(1);
         Assert.assertEquals(2, neighbors.size());
         Assert.assertTrue(neighbors.contains(new Edge<Integer, Integer>(1, 2, 0)));
         Assert.assertTrue(neighbors.contains(new Edge<Integer, Integer>(1, 3, 0)));
+
+        neighbors = instance.neighbors(2);
+        Assert.assertEquals(1, neighbors.size());
+        Assert.assertTrue(neighbors.contains(new Edge<Integer, Integer>(2, 1, 0)));
+
+        neighbors = instance.neighbors(3);
+        Assert.assertEquals(1, neighbors.size());
+        Assert.assertTrue(neighbors.contains(new Edge<Integer, Integer>(3, 1, 0)));
+
         instance.clear();
     }
 
