@@ -2,31 +2,30 @@ package com.killeent;
 
 import com.killeent.Graph.Edge;
 import com.killeent.Graph.SimpleLabeledGraph;
-import com.killeent.Graph.DirectedGraph;
+import com.killeent.Graph.DirectedHashGraph;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Collection;
-import java.util.Objects;
 
 /**
- * Tests for the {@link com.killeent.Graph.DirectedGraph}.
+ * Tests for the {@link com.killeent.Graph.DirectedHashGraph}.
  *
  * @author Trevor Killeen (2014)
  */
 public class DirectedGraphTest extends BaseSimpleLabeledGraphTest {
     @Override
     protected SimpleLabeledGraph<Integer, Integer> createInstance() {
-        return new DirectedGraph<Integer, Integer>();
+        return new DirectedHashGraph<Integer, Integer>();
     }
 
     /**
-     * Tests specific to the {@link com.killeent.Graph.DirectedGraph}.
+     * Tests specific to the {@link com.killeent.Graph.DirectedHashGraph}.
      */
 
     /**
-     * Tests for {@link com.killeent.Graph.DirectedGraph#addEdge},
-     * {@link com.killeent.Graph.DirectedGraph#containsEdge}
+     * Tests for {@link com.killeent.Graph.DirectedHashGraph#addEdge},
+     * {@link com.killeent.Graph.DirectedHashGraph#containsEdge}
      * and {@link DirectedGraphTest#removeEdge}.
      */
 
@@ -119,7 +118,7 @@ public class DirectedGraphTest extends BaseSimpleLabeledGraphTest {
     }
 
     /**
-     * Tests for {@link com.killeent.Graph.DirectedGraph#neighbors}
+     * Tests for {@link com.killeent.Graph.DirectedHashGraph#neighbors}
      */
 
     /**
@@ -143,8 +142,8 @@ public class DirectedGraphTest extends BaseSimpleLabeledGraphTest {
         instance.addEdge(1, 3, 0);
         Collection<Edge<Integer, Integer>> neighbors = instance.neighbors(1);
         Assert.assertEquals(2, neighbors.size());
-        Assert.assertTrue(neighbors.contains(new Edge<Integer, Object>(1, 2, 0)));
-        Assert.assertTrue(neighbors.contains(new Edge<Integer, Object>(1, 3, 0)));
+        Assert.assertTrue(neighbors.contains(new Edge<Integer, Integer>(1, 2, 0)));
+        Assert.assertTrue(neighbors.contains(new Edge<Integer, Integer>(1, 3, 0)));
         instance.clear();
     }
 

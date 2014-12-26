@@ -1,6 +1,6 @@
 package com.killeent;
 
-import com.killeent.Graph.DirectedGraph;
+import com.killeent.Graph.DirectedHashGraph;
 import com.killeent.Graph.Edge;
 import com.killeent.Graph.GraphSearch;
 import com.killeent.Graph.SimpleLabeledGraph;
@@ -23,7 +23,7 @@ public class GraphSearchTest {
 
     @Before
     public void setUp() {
-        instance = new DirectedGraph<Integer, Integer>();
+        instance = new DirectedHashGraph<Integer, Integer>();
         llInstance = new LinkedList<Edge<Integer, Integer>>();
     }
 
