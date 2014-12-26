@@ -20,8 +20,8 @@ public class GraphSearch {
      *             exists.
      * @return True if start and end are connected, otherwise false.
      */
-    public static <V extends Comparable<V>> boolean shortestPath(
-            SimpleLabeledGraph<V> g, V start, V end, List<Edge<V>> path) {
+    public static <V extends Comparable<V>, E extends Comparable<E>> boolean shortestPath(
+            SimpleLabeledGraph<V,E> g, V start, V end, List<Edge<V, E>> path) {
         if (g == null || start == null || end == null || path == null) {
             throw new IllegalArgumentException("null arguments to shortest path");
         }
@@ -30,7 +30,7 @@ public class GraphSearch {
         }
 
         Queue<V> queue = new LinkedList<V>();
-        Map<V, Edge<V>> discovered = new HashMap<V, Edge<V>>();
+        Map<V, Edge<V,E>> discovered = new HashMap<V, Edge<V,E>>();
         queue.add(start);
         discovered.put(start, null);
 
@@ -41,7 +41,7 @@ public class GraphSearch {
             // if we have found the end, build up the list of edges we took
             // to get here
             if (candidate.equals(end)) {
-                Edge<V> temp = discovered.get(candidate);
+                Edge<V, E> temp = discovered.get(candidate);
                 while (temp != null) {
                     path.add(0, temp);
                     temp = discovered.get(temp.getSource());
@@ -50,7 +50,7 @@ public class GraphSearch {
             }
 
             // otherwise, queue up all outgoing edges to non-discovered vertices
-            for (Edge<V> neighbor : g.neighbors(candidate)) {
+            for (Edge<V,E> neighbor : g.neighbors(candidate)) {
                 if (!discovered.containsKey(neighbor.getDestination())) {
                     discovered.put(neighbor.getDestination(), neighbor);
                     queue.add(neighbor.getDestination());

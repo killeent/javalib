@@ -3,21 +3,20 @@ package com.killeent.Graph;
 import java.util.*;
 
 /**
- * A simple, directed graph is an weighted, directed graph G = (V, E) that has
- * no self-loops or multi-edges.
+ * A simple, directed graph  G = (V, E) that has no self-loops or multi-edges.
  *
  * @author Trevor Killeen (2014)
  */
-public class DirectedGraph<V extends Comparable<V>> implements SimpleLabeledGraph<V> {
+public class DirectedGraph<V extends Comparable<V>, E extends Comparable<E>> implements SimpleLabeledGraph<V, E> {
 
     // We implement the graph using a Hash Table and adjacency list. Every vertex in the
     // graph is unique and maps to a list of edges, which represent edges from that vertex
     // to other nodes in the Graph.
 
-    private final Map<V, List<Edge<V>>> graph;
+    private final Map<V, List<Edge<V, E>>> graph;
 
     public DirectedGraph() {
-        graph = new HashMap<V, List<Edge<V>>>();
+        graph = new HashMap<V, List<Edge<V, E>>>();
     }
 
     @Override
@@ -26,7 +25,7 @@ public class DirectedGraph<V extends Comparable<V>> implements SimpleLabeledGrap
             throw new IllegalArgumentException("vertex cannot be null");
         }
         if (!graph.containsKey(vertex)) {
-            graph.put(vertex, new LinkedList<Edge<V>>());
+            graph.put(vertex, new LinkedList<Edge<V, E>>());
         }
     }
 
@@ -39,8 +38,8 @@ public class DirectedGraph<V extends Comparable<V>> implements SimpleLabeledGrap
     }
 
     @Override
-    public void addEdge(V vertexA, V vertexB) {
-        if (vertexA == null || vertexB == null) {
+    public void addEdge(V vertexA, V vertexB, E value) {
+        if (vertexA == null || vertexB == null || value == null) {
             throw new IllegalArgumentException("arguments cannot be null");
         }
         if (!graph.containsKey(vertexA)) {
@@ -52,27 +51,27 @@ public class DirectedGraph<V extends Comparable<V>> implements SimpleLabeledGrap
         if (vertexA == vertexB) {
             throw new IllegalArgumentException("no self edges allowed");
         }
-        Collection<Edge<V>> edges = graph.get(vertexA);
-        Edge<V> candidate = new Edge<V>(vertexA, vertexB);
+        Collection<Edge<V, E>> edges = graph.get(vertexA);
+        Edge<V, E> candidate = new Edge<V, E>(vertexA, vertexB, value);
         if (!edges.contains(candidate)) {
             edges.add(candidate);
         }
     }
 
     @Override
-    public boolean containsEdge(V vertexA, V vertexB) {
-        if (vertexA == null || vertexB == null) {
+    public boolean containsEdge(V vertexA, V vertexB, E value) {
+        if (vertexA == null || vertexB == null || value == null) {
             throw new IllegalArgumentException("arguments cannot be null");
         }
         if (!graph.containsKey(vertexA) || !graph.containsKey(vertexB)) {
             return false;
         }
-        return graph.get(vertexA).contains(new Edge<V>(vertexA, vertexB));
+        return graph.get(vertexA).contains(new Edge<V, E>(vertexA, vertexB, value));
     }
 
     @Override
-    public boolean removeEdge(V vertexA, V vertexB) {
-        if (vertexA == null || vertexB == null) {
+    public boolean removeEdge(V vertexA, V vertexB, E value) {
+        if (vertexA == null || vertexB == null || value == null) {
             throw new IllegalArgumentException("arguments cannot be null");
         }
         if (!graph.containsKey(vertexA)) {
@@ -81,11 +80,11 @@ public class DirectedGraph<V extends Comparable<V>> implements SimpleLabeledGrap
         if (!graph.containsKey(vertexB)) {
             throw new IllegalArgumentException("vertexB not in the graph");
         }
-        return graph.get(vertexA).remove(new Edge<V>(vertexA, vertexB));
+        return graph.get(vertexA).remove(new Edge<V, E>(vertexA, vertexB, value));
     }
 
     @Override
-    public Collection<Edge<V>> neighbors(V vertex) {
+    public Collection<Edge<V, E>> neighbors(V vertex) {
         if (vertex == null) {
             throw new IllegalArgumentException("vertex cannot be null");
         }

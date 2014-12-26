@@ -18,13 +18,13 @@ import java.util.List;
  */
 public class GraphSearchTest {
 
-    private SimpleLabeledGraph<Integer> instance;
-    private List<Edge<Integer>> llInstance;
+    private SimpleLabeledGraph<Integer, Integer> instance;
+    private List<Edge<Integer, Integer>> llInstance;
 
     @Before
     public void setUp() {
-        instance = new DirectedGraph<Integer>();
-        llInstance = new LinkedList<Edge<Integer>>();
+        instance = new DirectedGraph<Integer, Integer>();
+        llInstance = new LinkedList<Edge<Integer, Integer>>();
     }
 
 
@@ -121,9 +121,9 @@ public class GraphSearchTest {
     public void testShortestPathSingleEdge() {
         instance.addVertex(1);
         instance.addVertex(2);
-        instance.addEdge(1, 2);
+        instance.addEdge(1, 2, 0);
         Assert.assertTrue(GraphSearch.shortestPath(instance, 1, 2, llInstance));
-        Assert.assertTrue(llInstance.contains(new Edge<Integer>(1, 2)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 0)));
         instance.clear();
         llInstance.clear();
     }
@@ -136,12 +136,12 @@ public class GraphSearchTest {
         instance.addVertex(1);
         instance.addVertex(2);
         instance.addVertex(3);
-        instance.addEdge(1, 2);
-        instance.addEdge(2, 3);
+        instance.addEdge(1, 2, 0);
+        instance.addEdge(2, 3, 0);
         Assert.assertTrue(GraphSearch.shortestPath(instance, 1, 3, llInstance));
         Assert.assertEquals(2, llInstance.size());
-        Assert.assertTrue(llInstance.contains(new Edge<Integer>(1, 2)));
-        Assert.assertTrue(llInstance.contains(new Edge<Integer>(2, 3)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 0)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(2, 3, 0)));
         instance.clear();
         llInstance.clear();
     }
@@ -155,12 +155,12 @@ public class GraphSearchTest {
         instance.addVertex(1);
         instance.addVertex(2);
         instance.addVertex(3);
-        instance.addEdge(1, 2);
-        instance.addEdge(2, 3);
-        instance.addEdge(1, 3);
+        instance.addEdge(1, 2, 0);
+        instance.addEdge(2, 3, 0);
+        instance.addEdge(1, 3, 0);
         Assert.assertTrue(GraphSearch.shortestPath(instance, 1, 3, llInstance));
         Assert.assertEquals(1, llInstance.size());
-        Assert.assertTrue(llInstance.contains(new Edge<Integer>(1, 3)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 3, 0)));
         instance.clear();
         llInstance.clear();
     }
@@ -177,19 +177,19 @@ public class GraphSearchTest {
         instance.addVertex(4);
         instance.addVertex(5);
         instance.addVertex(6);
-        instance.addEdge(1, 2);
-        instance.addEdge(2, 3);
-        instance.addEdge(3, 4);
-        instance.addEdge(4, 2);
-        instance.addEdge(4, 5);
-        instance.addEdge(5, 6);
+        instance.addEdge(1, 2, 0);
+        instance.addEdge(2, 3, 0);
+        instance.addEdge(3, 4, 0);
+        instance.addEdge(4, 2, 0);
+        instance.addEdge(4, 5, 0);
+        instance.addEdge(5, 6, 0);
         Assert.assertTrue(GraphSearch.shortestPath(instance, 1, 6, llInstance));
         Assert.assertEquals(5, llInstance.size());
-        Assert.assertTrue(llInstance.contains(new Edge<Integer>(1, 2)));
-        Assert.assertTrue(llInstance.contains(new Edge<Integer>(2, 3)));
-        Assert.assertTrue(llInstance.contains(new Edge<Integer>(3, 4)));
-        Assert.assertTrue(llInstance.contains(new Edge<Integer>(4, 5)));
-        Assert.assertTrue(llInstance.contains(new Edge<Integer>(5, 6)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 0)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(2, 3, 0)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(3, 4, 0)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(4, 5, 0)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(5, 6, 0)));
         instance.clear();
         llInstance.clear();
     }

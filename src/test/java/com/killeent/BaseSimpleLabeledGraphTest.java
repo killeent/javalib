@@ -1,10 +1,12 @@
 package com.killeent;
 
+import com.killeent.Graph.EdgeFactory;
 import com.killeent.Graph.SimpleLabeledGraph;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -14,9 +16,9 @@ import java.util.Set;
  */
 public abstract class BaseSimpleLabeledGraphTest {
 
-    protected SimpleLabeledGraph<Integer> instance;
+    protected SimpleLabeledGraph<Integer, Integer> instance;
 
-    protected abstract SimpleLabeledGraph<Integer> createInstance();
+    protected abstract SimpleLabeledGraph<Integer, Integer> createInstance();
 
     @Before
     public void setUp() {
@@ -93,7 +95,7 @@ public abstract class BaseSimpleLabeledGraphTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphAddEdgeNullA() {
-        instance.addEdge(null, 1);
+        instance.addEdge(null, 1, 0);
     }
 
     /**
@@ -102,7 +104,7 @@ public abstract class BaseSimpleLabeledGraphTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphAddEdgeNullB() {
-        instance.addEdge(null, 1);
+        instance.addEdge(null, 1, 0);
     }
 
     /**
@@ -112,7 +114,7 @@ public abstract class BaseSimpleLabeledGraphTest {
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphAddEdgeMissingA() {
         instance.addVertex(2);
-        instance.addEdge(1, 2);
+        instance.addEdge(1, 2, 0);
         instance.clear();
     }
 
@@ -123,7 +125,7 @@ public abstract class BaseSimpleLabeledGraphTest {
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphAddEdgeMissingB() {
         instance.addVertex(1);
-        instance.addEdge(1, 2);
+        instance.addEdge(1, 2, 0);
         instance.clear();
     }
 
@@ -134,7 +136,7 @@ public abstract class BaseSimpleLabeledGraphTest {
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphAddSelfEdge() {
         instance.addVertex(1);
-        instance.addEdge(1, 1);
+        instance.addEdge(1, 1, 0);
         instance.clear();
     }
 
@@ -144,7 +146,7 @@ public abstract class BaseSimpleLabeledGraphTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphContainsEdgeNullA() {
-        instance.containsEdge(null, 1);
+        instance.containsEdge(null, 1, 0);
     }
 
     /**
@@ -153,7 +155,7 @@ public abstract class BaseSimpleLabeledGraphTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphContainsEdgeNullB() {
-        instance.containsEdge(1, null);
+        instance.containsEdge(1, null, 0);
     }
 
     /**
@@ -162,7 +164,7 @@ public abstract class BaseSimpleLabeledGraphTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphRemoveEdgeNullA() {
-        instance.removeEdge(null, 1);
+        instance.removeEdge(null, 1, 0);
     }
 
     /**
@@ -171,7 +173,7 @@ public abstract class BaseSimpleLabeledGraphTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphRemoveEdgeNullB() {
-        instance.removeEdge(null, 1);
+        instance.removeEdge(null, 1, 0);
     }
 
     /**
@@ -181,7 +183,7 @@ public abstract class BaseSimpleLabeledGraphTest {
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphRemoveEdgeMissingA() {
         instance.addVertex(2);
-        instance.removeEdge(1, 2);
+        instance.removeEdge(1, 2, 0);
         instance.clear();
     }
 
@@ -192,7 +194,7 @@ public abstract class BaseSimpleLabeledGraphTest {
     @Test(expected = IllegalArgumentException.class)
     public void testLabeledGraphRemoveEdgeMissingB() {
         instance.addVertex(1);
-        instance.removeEdge(1, 2);
+        instance.removeEdge(1, 2, 0);
         instance.clear();
     }
 
@@ -203,7 +205,7 @@ public abstract class BaseSimpleLabeledGraphTest {
     public void testLabeledGraphRemoveNonexistentEdge() {
         instance.addVertex(1);
         instance.addVertex(2);
-        Assert.assertFalse(instance.removeEdge(1, 2));
+        Assert.assertFalse(instance.removeEdge(1, 2, 0));
         instance.clear();
     }
 
