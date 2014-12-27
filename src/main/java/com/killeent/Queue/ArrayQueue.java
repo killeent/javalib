@@ -26,6 +26,9 @@ public class ArrayQueue<T> implements Queue<T> {
 
     @Override
     public void enqueue(T data) {
+        if (data == null) {
+            throw new IllegalArgumentException("data cannot be null");
+        }
         queue[free] = data;
         free = (free + 1) % queue.length;
         if (free == start) {
@@ -69,6 +72,6 @@ public class ArrayQueue<T> implements Queue<T> {
 
     @Override
     public int size() {
-        return (free > start) ? free - start : free + (queue.length - start);
+        return (free >= start) ? free - start : free + (queue.length - start);
     }
 }

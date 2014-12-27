@@ -10,6 +10,7 @@ public interface Queue<T> {
     /**
      * Adds the specified data to the end of the queue.
      *
+     * @throws java.lang.IllegalArgumentException if data is null.
      * @param data The data to add.
      */
     void enqueue(T data);
