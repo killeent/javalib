@@ -101,10 +101,11 @@ public class GraphSearch {
             UndirectedGraph<V,E> g, V candidate, Map<V,V> discovered) {
         for (Edge<V,E> neighbor : g.neighbors(candidate)) {
             V dst = neighbor.getDestination();
-            if (discovered.containsKey(dst) && !discovered.get(candidate).equals(dst)) {
+            if (discovered.containsKey(dst) &&
+                    (discovered.get(candidate) == null || !discovered.get(candidate).equals(dst))) {
                 // this is a back edge; there is a cycle
                 return true;
-            } else {
+            } else if (!discovered.containsKey(dst)) {
                 // tree edge; recurse
                 discovered.put(dst, candidate);
                 containsCycle(g, dst, discovered);

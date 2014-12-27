@@ -231,4 +231,50 @@ public class GraphSearchTest {
         Assert.assertFalse(GraphSearch.containsCycle(undirected, 1));
         undirected.clear();
     }
+
+    /**
+     * Tests that a graph containing a single edge does not contain a cycle.
+     */
+    @Test
+    public void testContainsCycleSingleEdge() {
+        undirected.addVertex(1);
+        undirected.addVertex(2);
+        undirected.addEdge(1, 2, 0);
+        Assert.assertFalse(GraphSearch.containsCycle(undirected, 1));
+        Assert.assertFalse(GraphSearch.containsCycle(undirected, 2));
+        undirected.clear();
+    }
+
+    /**
+     * Tests that a graph representing a list does not contain a cycle.
+     */
+    @Test
+    public void testContainsCycleListGraph() {
+        undirected.addVertex(1);
+        undirected.addVertex(2);
+        undirected.addVertex(3);
+        undirected.addEdge(1, 2, 0);
+        undirected.addEdge(2, 3, 0);
+        Assert.assertFalse(GraphSearch.containsCycle(undirected, 1));
+        Assert.assertFalse(GraphSearch.containsCycle(undirected, 2));
+        Assert.assertFalse(GraphSearch.containsCycle(undirected, 3));
+        undirected.clear();
+    }
+
+    /**
+     * Tests a graph containing a single simple cycle.
+     */
+    @Test
+    public void testContainsCycleSimpleCycle() {
+        undirected.addVertex(1);
+        undirected.addVertex(2);
+        undirected.addVertex(3);
+        undirected.addEdge(1, 2, 0);
+        undirected.addEdge(2, 3, 0);
+        undirected.addEdge(3, 1, 0);
+        Assert.assertTrue(GraphSearch.containsCycle(undirected, 1));
+        Assert.assertTrue(GraphSearch.containsCycle(undirected, 2));
+        Assert.assertTrue(GraphSearch.containsCycle(undirected, 3));
+        undirected.clear();
+    }
 }
