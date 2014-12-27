@@ -1,9 +1,6 @@
 package com.killeent;
 
-import com.killeent.Graph.DirectedHashGraph;
-import com.killeent.Graph.Edge;
-import com.killeent.Graph.GraphSearch;
-import com.killeent.Graph.SimpleLabeledGraph;
+import com.killeent.Graph.*;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,12 +15,14 @@ import java.util.List;
  */
 public class GraphSearchTest {
 
-    private SimpleLabeledGraph<Integer, Integer> instance;
+    private SimpleLabeledGraph<Integer, Integer> graph;
+    private UndirectedGraph<Integer, Integer> undirected;
     private List<Edge<Integer, Integer>> llInstance;
 
     @Before
     public void setUp() {
-        instance = new DirectedHashGraph<Integer, Integer>();
+        graph = new DirectedHashGraph<Integer, Integer>();
+        undirected = new UndirectedHashGraph<Integer, Integer>();
         llInstance = new LinkedList<Edge<Integer, Integer>>();
     }
 
@@ -47,7 +46,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testShortestPathNullStart() {
-        GraphSearch.shortestPath(instance, null, 2, llInstance);
+        GraphSearch.shortestPath(graph, null, 2, llInstance);
     }
 
     /**
@@ -56,7 +55,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testShortestPathNullEnd() {
-        GraphSearch.shortestPath(instance, 1, null, llInstance);
+        GraphSearch.shortestPath(graph, 1, null, llInstance);
     }
 
     /**
@@ -65,7 +64,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testShortestPathNullEdgeList() {
-        GraphSearch.shortestPath(instance, 1, 2, null);
+        GraphSearch.shortestPath(graph, 1, 2, null);
     }
 
     /**
@@ -74,9 +73,9 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testShortestPathNullMissingStart() {
-        instance.addVertex(2);
-        GraphSearch.shortestPath(instance, 1, 2, llInstance);
-        instance.clear();
+        graph.addVertex(2);
+        GraphSearch.shortestPath(graph, 1, 2, llInstance);
+        graph.clear();
     }
 
     /**
@@ -85,9 +84,9 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testShortestPathNullMissingEnd() {
-        instance.addVertex(1);
-        GraphSearch.shortestPath(instance, 1, 2, llInstance);
-        instance.clear();
+        graph.addVertex(1);
+        GraphSearch.shortestPath(graph, 1, 2, llInstance);
+        graph.clear();
     }
 
     /**
@@ -95,10 +94,10 @@ public class GraphSearchTest {
      */
     @Test
     public void testShortestPathToSelf() {
-        instance.addVertex(1);
-        Assert.assertTrue(GraphSearch.shortestPath(instance, 1, 1, llInstance));
+        graph.addVertex(1);
+        Assert.assertTrue(GraphSearch.shortestPath(graph, 1, 1, llInstance));
         Assert.assertTrue(llInstance.isEmpty());
-        instance.clear();
+        graph.clear();
         llInstance.clear();
     }
 
@@ -107,10 +106,10 @@ public class GraphSearchTest {
      */
     @Test
     public void testShortestPathUnconnectedNodes() {
-        instance.addVertex(1);
-        instance.addVertex(2);
-        Assert.assertFalse(GraphSearch.shortestPath(instance, 1, 2, llInstance));
-        instance.clear();
+        graph.addVertex(1);
+        graph.addVertex(2);
+        Assert.assertFalse(GraphSearch.shortestPath(graph, 1, 2, llInstance));
+        graph.clear();
         llInstance.clear();
     }
 
@@ -119,12 +118,12 @@ public class GraphSearchTest {
      */
     @Test
     public void testShortestPathSingleEdge() {
-        instance.addVertex(1);
-        instance.addVertex(2);
-        instance.addEdge(1, 2, 0);
-        Assert.assertTrue(GraphSearch.shortestPath(instance, 1, 2, llInstance));
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addEdge(1, 2, 0);
+        Assert.assertTrue(GraphSearch.shortestPath(graph, 1, 2, llInstance));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 0)));
-        instance.clear();
+        graph.clear();
         llInstance.clear();
     }
 
@@ -133,16 +132,16 @@ public class GraphSearchTest {
      */
     @Test
     public void testShortestPathMultipleEdges() {
-        instance.addVertex(1);
-        instance.addVertex(2);
-        instance.addVertex(3);
-        instance.addEdge(1, 2, 0);
-        instance.addEdge(2, 3, 0);
-        Assert.assertTrue(GraphSearch.shortestPath(instance, 1, 3, llInstance));
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addEdge(1, 2, 0);
+        graph.addEdge(2, 3, 0);
+        Assert.assertTrue(GraphSearch.shortestPath(graph, 1, 3, llInstance));
         Assert.assertEquals(2, llInstance.size());
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 0)));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(2, 3, 0)));
-        instance.clear();
+        graph.clear();
         llInstance.clear();
     }
 
@@ -152,16 +151,16 @@ public class GraphSearchTest {
      */
     @Test
     public void testShortestPathMultiplePaths() {
-        instance.addVertex(1);
-        instance.addVertex(2);
-        instance.addVertex(3);
-        instance.addEdge(1, 2, 0);
-        instance.addEdge(2, 3, 0);
-        instance.addEdge(1, 3, 0);
-        Assert.assertTrue(GraphSearch.shortestPath(instance, 1, 3, llInstance));
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addEdge(1, 2, 0);
+        graph.addEdge(2, 3, 0);
+        graph.addEdge(1, 3, 0);
+        Assert.assertTrue(GraphSearch.shortestPath(graph, 1, 3, llInstance));
         Assert.assertEquals(1, llInstance.size());
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 3, 0)));
-        instance.clear();
+        graph.clear();
         llInstance.clear();
     }
 
@@ -171,26 +170,65 @@ public class GraphSearchTest {
      */
     @Test
     public void testShortestPathGraphWithCycles() {
-        instance.addVertex(1);
-        instance.addVertex(2);
-        instance.addVertex(3);
-        instance.addVertex(4);
-        instance.addVertex(5);
-        instance.addVertex(6);
-        instance.addEdge(1, 2, 0);
-        instance.addEdge(2, 3, 0);
-        instance.addEdge(3, 4, 0);
-        instance.addEdge(4, 2, 0);
-        instance.addEdge(4, 5, 0);
-        instance.addEdge(5, 6, 0);
-        Assert.assertTrue(GraphSearch.shortestPath(instance, 1, 6, llInstance));
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        graph.addVertex(5);
+        graph.addVertex(6);
+        graph.addEdge(1, 2, 0);
+        graph.addEdge(2, 3, 0);
+        graph.addEdge(3, 4, 0);
+        graph.addEdge(4, 2, 0);
+        graph.addEdge(4, 5, 0);
+        graph.addEdge(5, 6, 0);
+        Assert.assertTrue(GraphSearch.shortestPath(graph, 1, 6, llInstance));
         Assert.assertEquals(5, llInstance.size());
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 0)));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(2, 3, 0)));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(3, 4, 0)));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(4, 5, 0)));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(5, 6, 0)));
-        instance.clear();
+        graph.clear();
         llInstance.clear();
+    }
+
+    /**
+     * Tests for {@link com.killeent.Graph.GraphSearch#containsCycle}.
+     */
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing a null graph.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testContainsCycleNullGraph() {
+        GraphSearch.containsCycle(null, 1);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing a null vertex.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testContainsCycleNullVertex() {
+        GraphSearch.containsCycle(undirected, null);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing in a vertex not
+     * found in the graph.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testContainsCycleMissingVertex() {
+        GraphSearch.containsCycle(undirected, 1);
+    }
+
+    /**
+     * Tests that a single element graph contains no cycles.
+     */
+    @Test
+    public void testContainsCycleEmptyGraph() {
+        undirected.addVertex(1);
+        Assert.assertFalse(GraphSearch.containsCycle(undirected, 1));
+        undirected.clear();
     }
 }

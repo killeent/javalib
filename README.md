@@ -16,6 +16,7 @@ Arrays:
 
 Graphs:
   - shortest path (BFS)
+  - cycle detection (undirected graph using DFS)
 
 Math:
   - power

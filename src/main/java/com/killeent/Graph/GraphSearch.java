@@ -18,6 +18,8 @@ public class GraphSearch {
      * @param end The node to find the shortest path to.
      * @param path An output parameter where the shortest path will be stored in one
      *             exists.
+     * @throws java.lang.IllegalArgumentException if any passed parameters are null.
+     * @throws java.lang.IllegalArgumentException if start or end isn't in the graph.
      * @return True if start and end are connected, otherwise false.
      */
     public static <V extends Comparable<V>, E extends Comparable<E>> boolean shortestPath(
@@ -59,6 +61,55 @@ public class GraphSearch {
         }
 
         // we didn't find the destination
+        return false;
+    }
+
+    /**
+     * Leverages DFS to detect the presence of a cycle in an undirected graph, if
+     * one exists.
+     *
+     * @param g The graph to search.
+     * @param start Start node to begin our search at.
+     * @throws java.lang.IllegalArgumentException if g or start is null.
+     * @throws java.lang.IllegalArgumentException if start is not in g.
+     * @return true if the graph contains a cycle, otherwise false.
+     */
+    public static <V extends Comparable<V>, E extends Comparable<E>> boolean containsCycle(
+            UndirectedGraph<V,E> g, V start) {
+        if (g == null || start == null) {
+            throw new IllegalArgumentException("null arguments to contains cycle");
+        }
+        if (!g.containsVertex(start)) {
+            throw new IllegalArgumentException("vertex missing from graph");
+        }
+
+        Map<V,V> discovered = new HashMap<V,V>();   // nodes we have seen and their parents
+        discovered.put(start, null);
+
+        return containsCycle(g, start, discovered);
+    }
+
+    /**
+     * Recursive helper function to detect the presence of a cycle in an undirected graph.
+     *
+     * @param g The graph to search.
+     * @param candidate node to search at.
+     * @param discovered Set of nodes that we have discovered along with their parents.
+     * @return true if the graph contains a cycle, otherwise false.
+     */
+    private static <V extends Comparable<V>, E extends Comparable<E>> boolean containsCycle(
+            UndirectedGraph<V,E> g, V candidate, Map<V,V> discovered) {
+        for (Edge<V,E> neighbor : g.neighbors(candidate)) {
+            V dst = neighbor.getDestination();
+            if (discovered.containsKey(dst) && !discovered.get(candidate).equals(dst)) {
+                // this is a back edge; there is a cycle
+                return true;
+            } else {
+                // tree edge; recurse
+                discovered.put(dst, candidate);
+                containsCycle(g, dst, discovered);
+            }
+        }
         return false;
     }
 
