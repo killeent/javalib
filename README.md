@@ -20,3 +20,6 @@ Graphs:
 Math:
   - power
   - binomial coefficient
+
+Trees:
+  - binary tree symmetry
