@@ -2,7 +2,8 @@ Data Structures:
 
 -- Binary Heap
 -- Graph
-  - unweighted, directed
+  - undirected, directed both supporting edge weights
+-- Queue
 
 Algorithms:
 
