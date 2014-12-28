@@ -24,4 +24,5 @@ Math:
   - binomial coefficient
 
 Trees:
+  - pre-, in- and post-order traversal
   - binary tree symmetry
