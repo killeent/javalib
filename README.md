@@ -16,7 +16,8 @@ Arrays:
 
 Graphs:
   - shortest path (BFS)
-  - cycle detection (undirected graph using DFS)
+  - cycle detection
+  - find articulation vertices
 
 Math:
   - power
