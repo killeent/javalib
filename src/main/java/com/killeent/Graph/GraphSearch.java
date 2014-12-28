@@ -248,8 +248,8 @@ public class GraphSearch {
         // parent through one of the nodes in the graph represented by the DFS subtree rooted at
         // candidate
         if (lw == dfsNumber.get(parent)) {
-            // low[candidate] = dfs of candidate's parent
             if (discovered.get(parent) != null) {
+                // parent is not the root, so it is an articulation vertex
                 result.add(parent);
             }
         }

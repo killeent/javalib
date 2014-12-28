@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Tests for {@link com.killeent.Graph.GraphSearch};
@@ -277,4 +278,148 @@ public class GraphSearchTest {
         Assert.assertTrue(GraphSearch.containsCycle(undirected, 3));
         undirected.clear();
     }
+
+    /**
+     * Tests for {@link com.killeent.Graph.GraphSearch#articulationVertices}.
+     */
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing a null graph.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testArticulationVerticesNullGraph() {
+        GraphSearch.articulationVertices(null, 1);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing a null vertex.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testArticulationVerticesNullVertex() {
+        GraphSearch.articulationVertices(undirected, null);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing in a vertex not
+     * found in the graph.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testArticulationVerticesMissingVertex() {
+        GraphSearch.articulationVertices(undirected, 1);
+    }
+
+    /**
+     * Tests that a single element graph contains no cycles.
+     */
+    @Test
+    public void testArticulationVerticesEmptyGraph() {
+        undirected.addVertex(1);
+        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 1).isEmpty());
+        undirected.clear();
+    }
+
+    /**
+     * Tests that a graph containing a single edge does not contain any articulation vertices.
+     */
+    @Test
+    public void testArticulationVertexSingleEdge() {
+        undirected.addVertex(1);
+        undirected.addVertex(2);
+        undirected.addEdge(1, 2, 0);
+        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 1).isEmpty());
+        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 2).isEmpty());
+        undirected.clear();
+    }
+
+    /**
+     * Tests that the graph consisting of three vertices in a line has 1 articulation vertex.
+     */
+    @Test
+    public void testArticulationVertexThreeVertexGraph() {
+        undirected.addVertex(1);
+        undirected.addVertex(2);
+        undirected.addVertex(3);
+        undirected.addEdge(1, 2, 0);
+        undirected.addEdge(2, 3, 0);
+        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 1).size() == 1);
+        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 1).contains(2));
+        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 2).size() == 1);
+        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 2).contains(2));
+        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 3).size() == 1);
+        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 3).contains(2));
+        undirected.clear();
+    }
+
+    /**
+     * Tests that a graph consisting of three vertices in a cycle has no articulation vertex.
+     */
+    @Test
+    public void testArticulationVertexThreeVertexCycle() {
+        undirected.addVertex(1);
+        undirected.addVertex(2);
+        undirected.addVertex(3);
+        undirected.addEdge(1, 2, 0);
+        undirected.addEdge(2, 3, 0);
+        undirected.addEdge(3, 1, 0);
+        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 1).isEmpty());
+        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 2).isEmpty());
+        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 3).isEmpty());
+        undirected.clear();
+    }
+
+    /**
+     * More comprehensive test for articulation vertices. Consider the input graph:
+     *
+     *                              (1)
+     *                             /   \
+     *                            (2)--(10)_____
+     *                           /      | |     \
+     *                         _(3)_   /  (11)--(12)
+     *                        /  |  \ /           |
+     *                       /  (7) (8)          (13)
+     *                       |   |   |
+     *                       |  (6) (9)
+     *                      (4)/  |
+     *                        \   /
+     *                         (5)
+     *
+     * Nodes 3, 8, 10, and 12 are articulation vertices.
+     */
+    @Test
+    public void testArticulationVerticesComprehensive() {
+        for (int i = 1; i <=13; i++) {
+            undirected.addVertex(i);
+        }
+
+        // construct edges as specified
+        undirected.addEdge(1, 2, 0);
+        undirected.addEdge(1, 10, 0);
+        undirected.addEdge(2, 3, 0);
+        undirected.addEdge(3, 4, 0);
+        undirected.addEdge(3, 7, 0);
+        undirected.addEdge(3, 8, 0);
+        undirected.addEdge(4, 5, 0);
+        undirected.addEdge(4, 6, 0);
+        undirected.addEdge(5, 6, 0);
+        undirected.addEdge(6, 7, 0);
+        undirected.addEdge(8, 9, 0);
+        undirected.addEdge(8, 10, 0);
+        undirected.addEdge(10, 11, 0);
+        undirected.addEdge(10, 12, 0);
+        undirected.addEdge(11, 12, 0);
+        undirected.addEdge(12, 13, 0);
+
+        for (int i = 1; i <= 13; i++) {
+            Set<Integer> result = GraphSearch.articulationVertices(undirected, i);
+            Assert.assertEquals(4, result.size());
+            Assert.assertTrue(result.contains(3));
+            Assert.assertTrue(result.contains(8));
+            Assert.assertTrue(result.contains(10));
+            Assert.assertTrue(result.contains(12));
+        }
+
+        undirected.clear();
+    }
+
+
 }
