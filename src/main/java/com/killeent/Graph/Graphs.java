@@ -261,15 +261,19 @@ public class Graphs {
      * is undefined.
      *
      * @param g The graph to sort.
+     * @throws java.lang.IllegalArgumentException if g is null.
      * @return A list of vertices in topological order.
      */
     public static <V extends Comparable<V>, E extends Comparable<E>> List<V> topologicalSort(
             DirectedGraph<V,E> g) {
+        if (g == null) {
+            throw new IllegalArgumentException("null graph");
+        }
+
         Set<V> visited = new HashSet<V>();
-        Set<V> candidates = g.vertices();
         Stack<V> stack = new Stack<V>();
 
-        for (V candidate : candidates) {
+        for (V candidate : g.vertices()) {
 
             // vertex was already discovered in a previous DFS iteration
             if (visited.contains(candidate)) {
@@ -312,36 +316,5 @@ public class Graphs {
         // the stack
         result.push(candidate);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

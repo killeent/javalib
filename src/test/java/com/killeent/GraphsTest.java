@@ -18,12 +18,14 @@ public class GraphsTest {
 
     private SimpleLabeledGraph<Integer, Integer> graph;
     private UndirectedGraph<Integer, Integer> undirected;
+    private DirectedGraph<Integer, Integer> directed;
     private List<Edge<Integer, Integer>> llInstance;
 
     @Before
     public void setUp() {
         graph = new DirectedHashGraph<Integer, Integer>();
         undirected = new UndirectedHashGraph<Integer, Integer>();
+        directed = new DirectedHashGraph<Integer, Integer>();
         llInstance = new LinkedList<Edge<Integer, Integer>>();
     }
 
@@ -421,5 +423,105 @@ public class GraphsTest {
         undirected.clear();
     }
 
+    /**
+     * Tests for {@link com.killeent.Graph.Graphs#topologicalSort}.
+     */
 
+    /**
+     * Tests for an {@link java.lang.IllegalArgumentException} when passing in a
+     * null graph.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testTopologicalSortNullGraph() {
+        Graphs.topologicalSort(null);
+    }
+
+    /**
+     * Tests topologically sorting an empty graph.
+     */
+    @Test
+    public void testTopologicalSortEmptyGraph() {
+        Graphs.topologicalSort(directed);
+    }
+
+    /**
+     * Tests topologically sorting a single element graph.
+     */
+    @Test
+    public void testTopologicalSortSingleElementGraph() {
+        directed.addVertex(1);
+        List<Integer> result = Graphs.topologicalSort(directed);
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(1, (int)result.get(0));
+        directed.clear();
+    }
+
+    /**
+     * Tests topologically sorting a list of three vertices.
+     */
+    @Test
+    public void testTopologicalSortThreeElementList() {
+        directed.addVertex(1);
+        directed.addVertex(2);
+        directed.addVertex(3);
+        directed.addEdge(1, 2, 0);
+        directed.addEdge(2, 3, 0);
+        List<Integer> result = Graphs.topologicalSort(directed);
+        Assert.assertEquals(3, result.size());
+        Assert.assertEquals(1, (int)result.get(0));
+        Assert.assertEquals(2, (int)result.get(1));
+        Assert.assertEquals(3, (int)result.get(2));
+        directed.clear();
+    }
+
+    /**
+     * Tests topological sort for a more complicated DAG:
+     *
+     *          (7)     (5)      (3)
+     *           |  \    /        /|
+     *           |   (11)        / |
+     *           |__ /_ |\ ____(8)  |
+     *              /   | \___ / _  |
+     *           (2)   (9)____/   \ |
+     *                            (10)
+     *
+     * (All edges are directed downwards from higher node to lower node).
+     *
+     * We test that we have generated a topological sort by asserting all
+     * the precedence constraints hold.
+     */
+    @Test
+    public void testTopologicalSortComplexGraph() {
+        directed.addVertex(7);
+        directed.addVertex(5);
+        directed.addVertex(3);
+        directed.addVertex(11);
+        directed.addVertex(8);
+        directed.addVertex(2);
+        directed.addVertex(9);
+        directed.addVertex(10);
+
+        directed.addEdge(7, 8, 0);
+        directed.addEdge(7, 11, 0);
+        directed.addEdge(5, 11, 0);
+        directed.addEdge(3, 8, 0);
+        directed.addEdge(3, 10, 0);
+        directed.addEdge(11, 2, 0);
+        directed.addEdge(11, 9, 0);
+        directed.addEdge(11, 10, 0);
+        directed.addEdge(8, 9, 0);
+
+        List<Integer> sorted = Graphs.topologicalSort(directed);
+        Assert.assertTrue(sorted.indexOf(7) < sorted.indexOf(8));
+        Assert.assertTrue(sorted.indexOf(7) < sorted.indexOf(11));
+        Assert.assertTrue(sorted.indexOf(5) < sorted.indexOf(11));
+        Assert.assertTrue(sorted.indexOf(3) < sorted.indexOf(8));
+        Assert.assertTrue(sorted.indexOf(3) < sorted.indexOf(10));
+        Assert.assertTrue(sorted.indexOf(11) < sorted.indexOf(2));
+        Assert.assertTrue(sorted.indexOf(11) < sorted.indexOf(9));
+        Assert.assertTrue(sorted.indexOf(11) < sorted.indexOf(10));
+        Assert.assertTrue(sorted.indexOf(8) < sorted.indexOf(9));
+
+        directed.clear();
+    }
 }
