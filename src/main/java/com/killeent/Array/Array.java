@@ -324,32 +324,21 @@ public class Array {
                     i++;
                 } else {
                     // an inversion because array[i] > array[j]. Copy array[j] to the
-                    // aux array and increment the inversion count by 1
+                    // aux array and increment the inversion count by mid - i because
+                    // array [i ... mid - 1] will all be > array[j]
                     aux[k] = array[j];
                     j++;
-                    inversions++;
+                    inversions += mid - i;
                 }
                 k++;
             }
 
-            // any remaining elements in array[lo ... mid-1] are greater than all elements
-            // in array[mid ... hi - 1], so for each element copy it to the aux array and
-            // increment inversions by hi - mid. Note that we consider the element at i++ -
-            // element i has already been compared to elements in array[mid ... hi - 1]
-            if (i < mid) {
-                aux[k] = array[i];
-                i++;
-                k++;
-            }
-
+            // copy over remaining elements
             while (i < mid) {
                 aux[k] = array[i];
                 i++;
                 k++;
-                inversions += hi - mid;
             }
-
-            // otherwise just copy over the elements in the upper half
             while (j < hi) {
                 aux[k] = array[j];
                 j++;

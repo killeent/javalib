@@ -169,33 +169,6 @@ public class HeapTest {
         assertExpectedHeapRemoval(heap, new String[]{"c", "f", "l", "o", "p", "x", "y", "z"});
     }
 
-    // tests that the heap order is maintained when we double the size of the
-    // internal array; this references the INITIAL_SIZE integer
-    @Test
-    public void testCopyOver() {
-        PriorityQueue<String> heap = new Heap<String>(new StringComparator());
-        PriorityQueue<String> heap2 = new Heap<String>(new StringComparator());
-        Random r = new Random();
-
-        for (int i = 0; i < Heap.DEFAULT_INITIAL_CAPACITY; i++) {
-            String next = "" + r.nextInt(Heap.DEFAULT_INITIAL_CAPACITY * 2);
-            heap.add(next);
-            heap2.add(next);
-        }
-
-        // guaranteed to fall at end of heap
-        heap2.add("" + (Heap.DEFAULT_INITIAL_CAPACITY * 3));
-
-        String[] expected = new String[Heap.DEFAULT_INITIAL_CAPACITY + 1];
-        int i = 0;
-        while (!heap.isEmpty()) {
-            expected[i] = heap.remove();
-            i++;
-        }
-        expected[i] = "" + Heap.DEFAULT_INITIAL_CAPACITY * 3;
-        assertExpectedHeapRemoval(heap2, expected);
-    }
-
     // tests the "build heap" Heap constructor
     @Test
     public void testBuildHeap() {
