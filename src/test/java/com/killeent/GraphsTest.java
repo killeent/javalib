@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Tests for {@link com.killeent.Graph.GraphSearch};
+ * Tests for {@link com.killeent.Graph.Graphs};
  *
  * @author Trevor Killeen (2014)
  */
-public class GraphSearchTest {
+public class GraphsTest {
 
     private SimpleLabeledGraph<Integer, Integer> graph;
     private UndirectedGraph<Integer, Integer> undirected;
@@ -29,7 +29,7 @@ public class GraphSearchTest {
 
 
     /**
-     * Tests for {@link com.killeent.Graph.GraphSearch#shortestPath}.
+     * Tests for {@link com.killeent.Graph.Graphs#shortestPath}.
      */
 
     /**
@@ -38,7 +38,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testShortestPathNullGraph() {
-        GraphSearch.shortestPath(null, 1, 2, llInstance);
+        Graphs.shortestPath(null, 1, 2, llInstance);
     }
 
     /**
@@ -47,7 +47,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testShortestPathNullStart() {
-        GraphSearch.shortestPath(graph, null, 2, llInstance);
+        Graphs.shortestPath(graph, null, 2, llInstance);
     }
 
     /**
@@ -56,7 +56,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testShortestPathNullEnd() {
-        GraphSearch.shortestPath(graph, 1, null, llInstance);
+        Graphs.shortestPath(graph, 1, null, llInstance);
     }
 
     /**
@@ -65,7 +65,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testShortestPathNullEdgeList() {
-        GraphSearch.shortestPath(graph, 1, 2, null);
+        Graphs.shortestPath(graph, 1, 2, null);
     }
 
     /**
@@ -75,7 +75,7 @@ public class GraphSearchTest {
     @Test(expected = IllegalArgumentException.class)
     public void testShortestPathNullMissingStart() {
         graph.addVertex(2);
-        GraphSearch.shortestPath(graph, 1, 2, llInstance);
+        Graphs.shortestPath(graph, 1, 2, llInstance);
         graph.clear();
     }
 
@@ -86,7 +86,7 @@ public class GraphSearchTest {
     @Test(expected = IllegalArgumentException.class)
     public void testShortestPathNullMissingEnd() {
         graph.addVertex(1);
-        GraphSearch.shortestPath(graph, 1, 2, llInstance);
+        Graphs.shortestPath(graph, 1, 2, llInstance);
         graph.clear();
     }
 
@@ -96,7 +96,7 @@ public class GraphSearchTest {
     @Test
     public void testShortestPathToSelf() {
         graph.addVertex(1);
-        Assert.assertTrue(GraphSearch.shortestPath(graph, 1, 1, llInstance));
+        Assert.assertTrue(Graphs.shortestPath(graph, 1, 1, llInstance));
         Assert.assertTrue(llInstance.isEmpty());
         graph.clear();
         llInstance.clear();
@@ -109,7 +109,7 @@ public class GraphSearchTest {
     public void testShortestPathUnconnectedNodes() {
         graph.addVertex(1);
         graph.addVertex(2);
-        Assert.assertFalse(GraphSearch.shortestPath(graph, 1, 2, llInstance));
+        Assert.assertFalse(Graphs.shortestPath(graph, 1, 2, llInstance));
         graph.clear();
         llInstance.clear();
     }
@@ -122,7 +122,7 @@ public class GraphSearchTest {
         graph.addVertex(1);
         graph.addVertex(2);
         graph.addEdge(1, 2, 0);
-        Assert.assertTrue(GraphSearch.shortestPath(graph, 1, 2, llInstance));
+        Assert.assertTrue(Graphs.shortestPath(graph, 1, 2, llInstance));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 0)));
         graph.clear();
         llInstance.clear();
@@ -138,7 +138,7 @@ public class GraphSearchTest {
         graph.addVertex(3);
         graph.addEdge(1, 2, 0);
         graph.addEdge(2, 3, 0);
-        Assert.assertTrue(GraphSearch.shortestPath(graph, 1, 3, llInstance));
+        Assert.assertTrue(Graphs.shortestPath(graph, 1, 3, llInstance));
         Assert.assertEquals(2, llInstance.size());
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 0)));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(2, 3, 0)));
@@ -158,7 +158,7 @@ public class GraphSearchTest {
         graph.addEdge(1, 2, 0);
         graph.addEdge(2, 3, 0);
         graph.addEdge(1, 3, 0);
-        Assert.assertTrue(GraphSearch.shortestPath(graph, 1, 3, llInstance));
+        Assert.assertTrue(Graphs.shortestPath(graph, 1, 3, llInstance));
         Assert.assertEquals(1, llInstance.size());
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 3, 0)));
         graph.clear();
@@ -183,7 +183,7 @@ public class GraphSearchTest {
         graph.addEdge(4, 2, 0);
         graph.addEdge(4, 5, 0);
         graph.addEdge(5, 6, 0);
-        Assert.assertTrue(GraphSearch.shortestPath(graph, 1, 6, llInstance));
+        Assert.assertTrue(Graphs.shortestPath(graph, 1, 6, llInstance));
         Assert.assertEquals(5, llInstance.size());
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 0)));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(2, 3, 0)));
@@ -195,7 +195,7 @@ public class GraphSearchTest {
     }
 
     /**
-     * Tests for {@link com.killeent.Graph.GraphSearch#containsCycle}.
+     * Tests for {@link com.killeent.Graph.Graphs#containsCycle}.
      */
 
     /**
@@ -203,7 +203,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testContainsCycleNullGraph() {
-        GraphSearch.containsCycle(null, 1);
+        Graphs.containsCycle(null, 1);
     }
 
     /**
@@ -211,7 +211,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testContainsCycleNullVertex() {
-        GraphSearch.containsCycle(undirected, null);
+        Graphs.containsCycle(undirected, null);
     }
 
     /**
@@ -220,7 +220,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testContainsCycleMissingVertex() {
-        GraphSearch.containsCycle(undirected, 1);
+        Graphs.containsCycle(undirected, 1);
     }
 
     /**
@@ -229,7 +229,7 @@ public class GraphSearchTest {
     @Test
     public void testContainsCycleEmptyGraph() {
         undirected.addVertex(1);
-        Assert.assertFalse(GraphSearch.containsCycle(undirected, 1));
+        Assert.assertFalse(Graphs.containsCycle(undirected, 1));
         undirected.clear();
     }
 
@@ -241,8 +241,8 @@ public class GraphSearchTest {
         undirected.addVertex(1);
         undirected.addVertex(2);
         undirected.addEdge(1, 2, 0);
-        Assert.assertFalse(GraphSearch.containsCycle(undirected, 1));
-        Assert.assertFalse(GraphSearch.containsCycle(undirected, 2));
+        Assert.assertFalse(Graphs.containsCycle(undirected, 1));
+        Assert.assertFalse(Graphs.containsCycle(undirected, 2));
         undirected.clear();
     }
 
@@ -256,9 +256,9 @@ public class GraphSearchTest {
         undirected.addVertex(3);
         undirected.addEdge(1, 2, 0);
         undirected.addEdge(2, 3, 0);
-        Assert.assertFalse(GraphSearch.containsCycle(undirected, 1));
-        Assert.assertFalse(GraphSearch.containsCycle(undirected, 2));
-        Assert.assertFalse(GraphSearch.containsCycle(undirected, 3));
+        Assert.assertFalse(Graphs.containsCycle(undirected, 1));
+        Assert.assertFalse(Graphs.containsCycle(undirected, 2));
+        Assert.assertFalse(Graphs.containsCycle(undirected, 3));
         undirected.clear();
     }
 
@@ -273,14 +273,14 @@ public class GraphSearchTest {
         undirected.addEdge(1, 2, 0);
         undirected.addEdge(2, 3, 0);
         undirected.addEdge(3, 1, 0);
-        Assert.assertTrue(GraphSearch.containsCycle(undirected, 1));
-        Assert.assertTrue(GraphSearch.containsCycle(undirected, 2));
-        Assert.assertTrue(GraphSearch.containsCycle(undirected, 3));
+        Assert.assertTrue(Graphs.containsCycle(undirected, 1));
+        Assert.assertTrue(Graphs.containsCycle(undirected, 2));
+        Assert.assertTrue(Graphs.containsCycle(undirected, 3));
         undirected.clear();
     }
 
     /**
-     * Tests for {@link com.killeent.Graph.GraphSearch#articulationVertices}.
+     * Tests for {@link com.killeent.Graph.Graphs#articulationVertices}.
      */
 
     /**
@@ -288,7 +288,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testArticulationVerticesNullGraph() {
-        GraphSearch.articulationVertices(null, 1);
+        Graphs.articulationVertices(null, 1);
     }
 
     /**
@@ -296,7 +296,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testArticulationVerticesNullVertex() {
-        GraphSearch.articulationVertices(undirected, null);
+        Graphs.articulationVertices(undirected, null);
     }
 
     /**
@@ -305,7 +305,7 @@ public class GraphSearchTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testArticulationVerticesMissingVertex() {
-        GraphSearch.articulationVertices(undirected, 1);
+        Graphs.articulationVertices(undirected, 1);
     }
 
     /**
@@ -314,7 +314,7 @@ public class GraphSearchTest {
     @Test
     public void testArticulationVerticesEmptyGraph() {
         undirected.addVertex(1);
-        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 1).isEmpty());
+        Assert.assertTrue(Graphs.articulationVertices(undirected, 1).isEmpty());
         undirected.clear();
     }
 
@@ -326,8 +326,8 @@ public class GraphSearchTest {
         undirected.addVertex(1);
         undirected.addVertex(2);
         undirected.addEdge(1, 2, 0);
-        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 1).isEmpty());
-        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 2).isEmpty());
+        Assert.assertTrue(Graphs.articulationVertices(undirected, 1).isEmpty());
+        Assert.assertTrue(Graphs.articulationVertices(undirected, 2).isEmpty());
         undirected.clear();
     }
 
@@ -341,12 +341,12 @@ public class GraphSearchTest {
         undirected.addVertex(3);
         undirected.addEdge(1, 2, 0);
         undirected.addEdge(2, 3, 0);
-        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 1).size() == 1);
-        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 1).contains(2));
-        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 2).size() == 1);
-        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 2).contains(2));
-        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 3).size() == 1);
-        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 3).contains(2));
+        Assert.assertTrue(Graphs.articulationVertices(undirected, 1).size() == 1);
+        Assert.assertTrue(Graphs.articulationVertices(undirected, 1).contains(2));
+        Assert.assertTrue(Graphs.articulationVertices(undirected, 2).size() == 1);
+        Assert.assertTrue(Graphs.articulationVertices(undirected, 2).contains(2));
+        Assert.assertTrue(Graphs.articulationVertices(undirected, 3).size() == 1);
+        Assert.assertTrue(Graphs.articulationVertices(undirected, 3).contains(2));
         undirected.clear();
     }
 
@@ -361,9 +361,9 @@ public class GraphSearchTest {
         undirected.addEdge(1, 2, 0);
         undirected.addEdge(2, 3, 0);
         undirected.addEdge(3, 1, 0);
-        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 1).isEmpty());
-        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 2).isEmpty());
-        Assert.assertTrue(GraphSearch.articulationVertices(undirected, 3).isEmpty());
+        Assert.assertTrue(Graphs.articulationVertices(undirected, 1).isEmpty());
+        Assert.assertTrue(Graphs.articulationVertices(undirected, 2).isEmpty());
+        Assert.assertTrue(Graphs.articulationVertices(undirected, 3).isEmpty());
         undirected.clear();
     }
 
@@ -410,7 +410,7 @@ public class GraphSearchTest {
         undirected.addEdge(12, 13, 0);
 
         for (int i = 1; i <= 13; i++) {
-            Set<Integer> result = GraphSearch.articulationVertices(undirected, i);
+            Set<Integer> result = Graphs.articulationVertices(undirected, i);
             Assert.assertEquals(4, result.size());
             Assert.assertTrue(result.contains(3));
             Assert.assertTrue(result.contains(8));

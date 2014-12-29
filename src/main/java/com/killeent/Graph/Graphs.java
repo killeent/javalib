@@ -3,11 +3,11 @@ package com.killeent.Graph;
 import java.util.*;
 
 /**
- * Various Graph Search/Traversal algorithms.
+ * Various Graph Search/Sort/Traversal algorithms.
  *
  * @author Trevor Killeen (2014)
  */
-public class GraphSearch {
+public class Graphs {
 
     /**
      * Performs BFS on the input graph to find a shortest path between two vertices, if
@@ -254,5 +254,94 @@ public class GraphSearch {
             }
         }
     }
+
+    /**
+     * Returns the topological ordering of nodes in the passed graph which must be a DAG.
+     * If the passed graph is not a DAG (i.e. it contains cycles), the behavior of this function
+     * is undefined.
+     *
+     * @param g The graph to sort.
+     * @return A list of vertices in topological order.
+     */
+    public static <V extends Comparable<V>, E extends Comparable<E>> List<V> topologicalSort(
+            DirectedGraph<V,E> g) {
+        Set<V> visited = new HashSet<V>();
+        Set<V> candidates = g.vertices();
+        Stack<V> stack = new Stack<V>();
+
+        for (V candidate : candidates) {
+
+            // vertex was already discovered in a previous DFS iteration
+            if (visited.contains(candidate)) {
+                continue;
+            }
+
+            // perform DFS on this node to find all of its subsequent elements
+            topologicalSort(candidate, g, visited, stack);
+        }
+
+        // we now have a stack containing the nodes in topological ordering (with the
+        // first element on the top of the stack). Convert this to a list.
+        List<V> result = new LinkedList<V>();
+        while (!stack.isEmpty()) {
+            result.add(stack.pop());
+        }
+        return result;
+    }
+
+    /**
+     * Recursive helper function for topological sort. Performs DFS on the candidate node.
+     *
+     * @param candidate The node to begin our DFS search at.
+     * @param g The graph containing candidate.
+     * @param visited The nodes we have visited in the graph.
+     * @param result The stack maintaining the topological order of visited nodes.
+     */
+    private static <V extends Comparable<V>, E extends Comparable<E>> void topologicalSort(
+            V candidate, DirectedGraph<V,E> g, Set<V> visited, Stack<V> result) {
+        visited.add(candidate);
+
+        // consider all outgoing edges
+        for (Edge<V,E> e : g.neighbors(candidate)) {
+            if (!visited.contains(e.getDestination())) {
+                topologicalSort(e.getDestination(), g, visited, result);
+            }
+        }
+
+        // we have visited all subsequent nodes in the graph; we can now place ourselves on
+        // the stack
+        result.push(candidate);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

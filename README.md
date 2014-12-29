@@ -18,6 +18,7 @@ Graphs:
   - shortest path (BFS)
   - cycle detection
   - find articulation vertices
+  - topological sort (DAG)
 
 Math:
   - power
