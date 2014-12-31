@@ -108,7 +108,9 @@ public class Graphs {
             } else if (!discovered.containsKey(dst)) {
                 // tree edge; recurse
                 discovered.put(dst, candidate);
-                containsCycle(g, dst, discovered);
+                if (containsCycle(g, dst, discovered)) {
+                    return true;
+                }
             }
         }
         return false;
