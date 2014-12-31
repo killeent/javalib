@@ -4,6 +4,7 @@ Data Structures:
 -- Graph
   - undirected, directed both supporting edge weights
 -- Queue
+-- Fixed Size Thread Pool
 
 Algorithms:
 
