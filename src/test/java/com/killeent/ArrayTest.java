@@ -21,7 +21,8 @@ public class ArrayTest {
 
     /**
      * Tests common to all sort implementations:
-     * {@link com.killeent.Array.Array#quickSort}.
+     * {@link com.killeent.Array.Array#quickSort(Object[], java.util.Comparator)},
+     * {@link com.killeent.Array.Array#mergeSort(Object[], java.util.Comparator)}.
      */
 
     /**
@@ -113,6 +114,7 @@ public class ArrayTest {
      */
     private void runTest(Integer[] input, Integer[] expected) {
         Array.quickSort(input, integerComparator);
+        Array.mergeSort(input, integerComparator);
         Assert.assertArrayEquals(expected, input);
     }
 

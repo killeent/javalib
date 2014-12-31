@@ -15,6 +15,7 @@ Arrays:
   - kth smallest element
   - count inversions
   - remove duplicates
+  - merge sort
 
 Graphs:
   - shortest path (BFS)

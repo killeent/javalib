@@ -378,4 +378,68 @@ public class Array {
         }
         return arr.length - outputIndex;
     }
+
+    /**
+     * Sorts the specified array using the ordering determined by the passed comparator.
+     *
+     * @param arr The array to sort.
+     * @param comparator Comparator to use for ordering.
+     */
+    public static <T> void mergeSort(T[] arr, Comparator<? super T> comparator) {
+        mergeSort(arr, comparator, 0, arr.length);
+    }
+
+    /**
+     * Recursive helper function for merge sort. Sorts the input array[lo ... hi-1] using the
+     * ordering specified by the comparator.
+     *
+     * @param arr The array to sort.
+     * @param comparator Comparator to use for ordering.
+     * @param lo Low index (inclusive) into the array to sort.
+     * @param hi High index (exclusive) into the array to sort.
+     */
+    @SuppressWarnings("unchecked") // initializing a generic array
+    private static <T> void mergeSort(T[] arr, Comparator<? super T> comparator, int lo, int hi) {
+        if (lo < hi - 1) {
+            // recursively sort left and right halves
+            int mid = lo + ((hi - lo) / 2);
+            mergeSort(arr, comparator, lo, mid);
+            mergeSort(arr, comparator, mid, hi);
+
+            // merge results
+            T[] aux = (T[]) new Object[hi-lo];
+            int i = lo;
+            int j = mid;
+            int k = 0;
+
+            // iteratively pick the smaller element
+            while (i < mid && j < hi) {
+                if (comparator.compare(arr[i], arr[j]) <= 0) {
+                    aux[k] = arr[i];
+                    i++;
+                } else {
+                    aux[k] = arr[j];
+                    j++;
+                }
+                k++;
+            }
+
+            // copy over remaining elements in left or right halves
+            while (i < mid) {
+                aux[k] = arr[i];
+                i++;
+                k++;
+            }
+            while (j < hi) {
+                aux[k] = arr[j];
+                j++;
+                k++;
+            }
+
+            // copy back results
+            for (k = 0; k < aux.length; k++) {
+                arr[lo + k] = aux[k];
+            }
+        }
+    }
 }
