@@ -1,5 +1,9 @@
 package com.killeent.Math;
 
+import java.util.BitSet;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Various mathematical operations.
  *
@@ -77,6 +81,38 @@ public class Math {
         }
 
         return matrix[n][k];
+    }
+
+    /**
+     * Returns a list of all prime numbers between 2 and n.
+     *
+     * @param n Upper (inclusive) bound on numbers to consider.
+     * @return An ordered list of primes between 2 and n.
+     */
+    public static List<Integer> enumeratePrimes(int n) {
+        if (n < 2) {
+            throw new IllegalArgumentException("n must be >= 2");
+        }
+
+        List<Integer> result = new LinkedList<Integer>();
+
+        // composites[i] is set to false if i is not a composite integer -> it is prime
+        BitSet composites = new BitSet(n+1);
+
+        for (int i = 2; i <= n; i++) {
+            if (!composites.get(i)) {
+                result.add(i);
+
+                // set all multiples of i to be composite
+                int j = i * i;
+                while (j <= n) {
+                    composites.set(j);
+                    j = j + i;
+                }
+            }
+        }
+
+        return result;
     }
 
 }

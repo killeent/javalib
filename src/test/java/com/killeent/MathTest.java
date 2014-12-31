@@ -4,6 +4,8 @@ import com.killeent.Math.Math;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * Test class for the Math library {@link com.killeent.Math.Math}.
  *
@@ -118,6 +120,42 @@ public class MathTest {
         Assert.assertEquals(15, Math.binomialCoefficient(6, 4));
         Assert.assertEquals(6, Math.binomialCoefficient(6, 5));
         Assert.assertEquals(1, Math.binomialCoefficient(6, 6));
+    }
+
+    /**
+     * Tests for {@link com.killeent.Math.Math#enumeratePrimes(int)}.
+     */
+
+    /**
+     * Tests for an {@link java.lang.IllegalArgumentException} if n is < 2.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testEnumeratePrimesNLessThan2() {
+        Math.enumeratePrimes(1);
+    }
+
+    /**
+     * Tests for enumerating all primes between 2 and 2.
+     */
+    @Test
+    public void testEnumeratePrimes2To2() {
+        List<Integer> result = Math.enumeratePrimes(2);
+        Assert.assertEquals(1, result.size());
+        Assert.assertTrue(result.contains(2));
+    }
+
+    /**
+     * Tests for enumerating all primes between 2 and 100.
+     */
+    @Test
+    public void testEnumeratePrimes2To100() {
+        List<Integer> result = Math.enumeratePrimes(100);
+        Integer[] expected = new Integer[]{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47,
+                53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
+        Assert.assertEquals(expected.length, result.size());
+        for(int i = 0; i < expected.length; i++) {
+            Assert.assertEquals(expected[i], result.get(i));
+        }
     }
 
 
