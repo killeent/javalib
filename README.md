@@ -13,6 +13,7 @@ Arrays:
   - first occurrence
   - kth smallest element
   - count inversions
+  - remove duplicates
 
 Graphs:
   - shortest path (BFS)
@@ -23,6 +24,7 @@ Graphs:
 Math:
   - power
   - binomial coefficient
+  - enumerate primes
 
 Trees:
   - pre-, in- and post-order traversal
