@@ -352,4 +352,30 @@ public class Array {
             return inversions;
         }
     }
+
+    /**
+     * Takes as input a sorted array and updates it such that all duplicates are removed
+     * and the remaining elements have been shifted to the left to fill the empty indices.
+     *
+     * @param arr A sorted array.
+     * @throws java.lang.IllegalArgumentException if arr is null.
+     * @return The number of duplicates in the array.
+     */
+    public static <T> int removeDuplicates(T[] arr) {
+        if (arr == null) {
+            throw new IllegalArgumentException("null array");
+        }
+
+        int i = 0, outputIndex = 0;
+        while (i < arr.length) {
+            int j = i + 1;
+            while (j < arr.length && arr[i].equals(arr[j])) {
+                j++;
+            }
+            arr[outputIndex] = arr[i];
+            outputIndex++;
+            i = j;
+        }
+        return arr.length - outputIndex;
+    }
 }

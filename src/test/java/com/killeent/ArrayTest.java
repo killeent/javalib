@@ -339,4 +339,75 @@ public class ArrayTest {
         Integer[] input = new Integer[]{4, 5, 3, 7, 4, 5, 1, 2, 10};
         Assert.assertEquals(17, Array.inversions(input, integerComparator));
     }
+
+    /**
+     * Tests for {@link com.killeent.Array.Array#removeDuplicates}.
+     */
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if arr is null.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testRemoveDuplicatesNullArray() {
+        Array.removeDuplicates(null);
+    }
+
+    /**
+     * Tests removing duplicates from an empty array.
+     */
+    @Test
+    public void testRemoveDuplicatesEmptyArray() {
+        Assert.assertEquals(0, Array.removeDuplicates(new Integer[0]));
+    }
+
+    /**
+     * Tests removing duplicates from a single element array.
+     */
+    @Test
+    public void testRemoveDuplicatesSingleElementArray() {
+        Assert.assertEquals(0, Array.removeDuplicates(new Integer[]{1}));
+    }
+
+    /**
+     * Tests removing duplicates from an array with no duplicates.
+     */
+    @Test
+    public void testRemoveDuplicatesDuplicateFreeArray() {
+        Integer[] input = new Integer[]{1, 2, 3, 4, 5};
+        Integer[] expected = new Integer[]{1, 2, 3, 4, 5};
+        Assert.assertEquals(0, Array.removeDuplicates(input));
+        Assert.assertEquals(expected, input);
+    }
+
+    /**
+     * Tests removing duplicates from an array with all duplicates.
+     */
+    @Test
+    public void testRemoveDuplicatesAllDuplicateArray() {
+        Integer[] input = new Integer[]{1, 1, 1, 1, 1};
+        Integer[] expected = new Integer[]{1};
+        Assert.assertEquals(4, Array.removeDuplicates(input));
+        for (int i = 0; i < expected.length; i++) {
+            Assert.assertEquals(expected[i], input[i]);
+        }
+        input = new Integer[]{1, 1, 2, 2, 2, 3, 3};
+        expected = new Integer[]{1, 2, 3};
+        Assert.assertEquals(4, Array.removeDuplicates(input));
+        for (int i = 0; i < expected.length; i++) {
+            Assert.assertEquals(expected[i], input[i]);
+        }
+    }
+
+    /**
+     * Tests removing duplicates from a mixed array.
+     */
+    @Test
+    public void testRemoveDuplicatesMixedArray() {
+        Integer[] input = new Integer[]{1, 2, 2, 3, 4, 4, 4, 5, 6, 9, 11, 11};
+        Integer[] expected = new Integer[]{1, 2, 3, 4, 5, 6, 9, 11};
+        Assert.assertEquals(4, Array.removeDuplicates(input));
+        for (int i = 0; i < expected.length; i++) {
+            Assert.assertEquals(expected[i], input[i]);
+        }
+    }
 }
