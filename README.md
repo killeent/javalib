@@ -42,6 +42,7 @@ Math:
 
 Strings:
 * palindrome
+* Knuth-Morris-Pratt matching
 
 Trees:
 * pre-, in- and post-order traversal
