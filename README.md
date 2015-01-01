@@ -10,8 +10,6 @@ javalib is a Java Library of Data Structures and Algorithms I have implemented f
 ### Dependencies
 
 * JUnit
-* JSoup
-* Apache Commons CLI
 
 ### Data Structures
 
