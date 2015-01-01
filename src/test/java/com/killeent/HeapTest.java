@@ -1,11 +1,11 @@
 package com.killeent;
 
-import com.killeent.PriorityQueue.PriorityQueue;
 import com.killeent.PriorityQueue.Heap;
+import com.killeent.PriorityQueue.PriorityQueue;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Comparator;
 
 /**
  * A simple test class for the binary heap {@link com.killeent.PriorityQueue.Heap}.

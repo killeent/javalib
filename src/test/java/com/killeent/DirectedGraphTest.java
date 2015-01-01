@@ -1,8 +1,8 @@
 package com.killeent;
 
+import com.killeent.Graph.DirectedHashGraph;
 import com.killeent.Graph.Edge;
 import com.killeent.Graph.SimpleLabeledGraph;
-import com.killeent.Graph.DirectedHashGraph;
 import org.junit.Assert;
 import org.junit.Test;
 
