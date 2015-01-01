@@ -53,31 +53,28 @@ public class Strings {
         // Construct the partial match table for the search string
         int[] partial = buildTable(search);
 
-        int sIndex = 0;         // index into s
-        int searchIndex = 0;    // index into search
-        int candidate = 0;      // index of beginning of match
+        int match = 0; // index of the start of the current match
+        int index = 0; // index into W
 
-        while (sIndex < s.length() - search.length()) {
-            if (s.charAt(sIndex) == search.charAt(searchIndex)) {
+        while (match + index < s.length()) {
+            if (s.charAt(match + index) == search.charAt(index)) {
                 // match occurs
-                sIndex++;
-                searchIndex++;
-                if (searchIndex == search.length()) {
+                index++;
+                if (index == search.length()) {
                     // we have matched completely, return candidate
-                    return candidate;
+                    return match;
                 }
             } else {
                 // mismatch occurs
-                if (partial[sIndex] > -1) {
+                if (partial[index] > -1) {
                     // we can fall back in searchIndex
-                    searchIndex = partial[sIndex];
-                    candidate = sIndex - partial[sIndex];
+                    match = match + index - partial[index];
+                    index = partial[index];
                 } else {
                     // can't fall back, consider the next character as the
                     // start of a potential match
-                    sIndex++;
-                    searchIndex = 0;
-                    candidate = sIndex;
+                    index = 0;
+                    match++;
                 }
             }
         }
@@ -103,6 +100,11 @@ public class Strings {
 
         // by convention, T[0] = -1, T[1] = 0
         table[0] = -1;
+
+        if (search.length() == 1) {
+            return table;
+        }
+
         table[1] = 0;
 
         int segmentIndex = 0;   // index into W
