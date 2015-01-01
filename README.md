@@ -1,33 +1,48 @@
-Data Structures:
+## javalib
 
--- Binary Heap
--- Graph
-  - undirected, directed both supporting edge weights
--- Queue
--- Fixed Size Thread Pool
+javalib is a Java Library of Data Structures and Algorithms I have implemented for practice.
 
-Algorithms:
+### Building
+
+* To compile, type: `mvn compile`
+* To run unit tests, type: `mvn test`
+
+### Dependencies
+
+* JUnit
+
+### Data Structures
+
+* Binary Heap
+* Graph (undirected & directed)
+* Queue
+* Thread Pool
+
+### Algorithms:
 
 Arrays:
-  - quicksort
-  - binary search
-  - first occurrence
-  - kth smallest element
-  - count inversions
-  - remove duplicates
-  - merge sort
+* quicksort
+* binary search
+* first occurrence
+* kth smallest element
+* count inversions
+* remove duplicates
+* merge sort
 
 Graphs:
-  - shortest path (BFS)
-  - cycle detection
-  - find articulation vertices
-  - topological sort (DAG)
+* shortest path (BFS)
+* cycle detection
+* find articulation vertices
+* topological sort (DAG)
 
 Math:
-  - power
-  - binomial coefficient
-  - enumerate primes
+* power
+* binomial coefficient
+* enumerate primes
+
+Strings:
+* palindrome
 
 Trees:
-  - pre-, in- and post-order traversal
-  - binary tree symmetry
+* pre-, in- and post-order traversal
+* binary tree symmetry
