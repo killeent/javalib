@@ -205,7 +205,7 @@ public class GraphsTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testContainsCycleNullGraph() {
-        Graphs.containsCycle(null, 1);
+        Graphs.<Integer,Integer>containsCycle(null, 1);
     }
 
     /**
@@ -290,7 +290,7 @@ public class GraphsTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testArticulationVerticesNullGraph() {
-        Graphs.articulationVertices(null, 1);
+        Graphs.<Integer, Integer>articulationVertices(null, 1);
     }
 
     /**
@@ -433,7 +433,7 @@ public class GraphsTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testTopologicalSortNullGraph() {
-        Graphs.topologicalSort(null);
+        Graphs.<Integer,Integer>topologicalSort(null);
     }
 
     /**
