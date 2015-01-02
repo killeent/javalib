@@ -104,10 +104,11 @@ public class Timer {
 
                         // otherwise, wait for the next tasks execution time
                         // to be equal to the current time
+                        long diff = tasks.peek().getExecutionTime() - System.currentTimeMillis();
                         while (!canceled &&
-                                tasks.peek().getExecutionTime() > System.currentTimeMillis()) {
+                                diff > 0) {
                             taskDelayCV.await(
-                                    tasks.peek().getExecutionTime() - System.currentTimeMillis(),
+                                    diff,
                                     TimeUnit.MILLISECONDS);
                         }
 
