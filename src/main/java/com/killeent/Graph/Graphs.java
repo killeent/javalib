@@ -65,6 +65,91 @@ public class Graphs {
     }
 
     /**
+     * Performs Djikstra's algorithm on the input graph with non-negative integer edges
+     * to find a shortest path between two vertices, if one exists.
+     *
+     * @param g The graph to search.
+     * @param start The start node to consider.
+     * @param end The node to find the shortest path to.
+     * @param path An output parameter where the shortest path will be stored in one
+     *             exists.
+     * @throws java.lang.IllegalArgumentException if any passed parameters are null.
+     * @throws java.lang.IllegalArgumentException if start or end isn't in the graph.
+     * @return True if start and end are connected, otherwise false.
+     */
+    public static <V extends Comparable<V>> boolean djikstrasPath(
+            SimpleLabeledGraph<V, Integer> g, V start, V end, List<Edge<V, Integer>> path) {
+        if (g == null || start == null || end == null || path == null) {
+            throw new IllegalArgumentException("null arguments to shortest path");
+        }
+        if (!g.containsVertex(start) || !g.containsVertex(end)) {
+            throw new IllegalArgumentException("vertex missing from graph");
+        }
+
+        // Initialize distances, parents for vertices in the graph
+        final Map<V, Integer> distances = new HashMap<V, Integer>();
+        Map<V, Edge<V,Integer>> parents = new HashMap<V, Edge<V, Integer>>();
+        for (V vertex : g.vertices()) {
+            distances.put(vertex, Integer.MAX_VALUE);
+            parents.put(vertex, null);
+        }
+        distances.put(start, 0);
+
+        // Order by distance to vertex
+        PriorityQueue<V> queue = new PriorityQueue<V>(g.vertices().size(), new Comparator<V>() {
+            @Override
+            public int compare(V o1, V o2) {
+                return distances.get(o1) - distances.get(o2);
+            }
+        });
+        queue.addAll(g.vertices());
+
+        // Keep track of what we have discovered
+        Set<V> discovered = new HashSet<V>();
+
+        while (queue.isEmpty()) {
+            V candidate = queue.remove();
+
+            if (candidate.equals(end)) {
+                // rebuild path
+                Edge<V, Integer> inEdge = parents.get(candidate);
+
+                while (inEdge != null) {
+                    path.add(inEdge);
+                    inEdge = parents.get(inEdge.getSource());
+                }
+                return true;
+            }
+            discovered.add(candidate);
+
+            // iterate over edges, updating distances/parents for neighbors if they are lesser
+            for (Edge<V, Integer> edge : g.neighbors(candidate)) {
+                V neighbor = edge.getDestination();
+                if (!discovered.contains(neighbor)) {
+                    // if the distance from source to this node + the edge distance is less
+                    // than the current distance for the neighbor, update its distance and
+                    // set this node as parent
+                    int distance = distances.get(candidate) + edge.getValue();
+                    if (distance <= distances.get(neighbor)) {
+                        distances.put(neighbor, distance);
+                        parents.put(neighbor, edge);
+
+                        // approximate decreaseKey
+                        queue.remove(neighbor);
+                        queue.add(neighbor);
+                    }
+                }
+            }
+
+        }
+
+        // no path found
+        return false;
+    }
+
+
+
+    /**
      * Leverages DFS to detect the presence of a cycle in an undirected graph, if
      * one exists.
      *

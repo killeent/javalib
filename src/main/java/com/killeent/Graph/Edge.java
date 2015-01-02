@@ -1,11 +1,11 @@
 package com.killeent.Graph;
 
 /**
- * Represents an unweighted, immutable edge in a Graph.
+ * Represents an immutable edge in a Graph.
  *
  * @author Trevor Killeen (2014)
  */
-public class Edge<V extends Comparable<V>, E> {
+public class Edge<V extends Comparable<V>, E extends Comparable<E>> {
 
     private final V source;
     private final V destination;
