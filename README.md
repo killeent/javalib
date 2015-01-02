@@ -17,6 +17,7 @@ javalib is a Java Library of Data Structures and Algorithms I have implemented f
 * Graph (undirected & directed)
 * Queue
 * Thread Pool
+* Timer
 
 ### Algorithms:
 
