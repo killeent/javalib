@@ -1,6 +1,9 @@
 package com.killeent;
 
+import junit.framework.Assert;
+
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Various utility functions and classes for testing purposes.
@@ -17,6 +20,16 @@ public class TestUtil {
         @Override
         public int compare(Integer o1, Integer o2) {
             return o1 - o2;
+        }
+    }
+
+    /**
+     * Asserts that the elements in two lists are equal.
+     */
+    public static <T> void assertListEquals(List<T> expected, List<T> actual) {
+        Assert.assertEquals("mismatched list sizes", expected.size(), actual.size());
+        for (int i = 0; i < expected.size(); i++) {
+            Assert.assertEquals(expected.get(i), actual.get(i));
         }
     }
 

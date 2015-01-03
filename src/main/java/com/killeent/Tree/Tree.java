@@ -72,7 +72,7 @@ public class Tree {
      * @param root The tree to traverse.
      * @return The list of elements in the order that they appear from a pre-order traversal.
      */
-    private static <T> List<T> preOrderIterative(BinaryTreeNode<T> root) {
+    public static <T> List<T> preOrderIterative(BinaryTreeNode<T> root) {
         List<T> result = new LinkedList<T>();
         if (root != null) {
             Stack<BinaryTreeNode<T>> stack = new Stack<BinaryTreeNode<T>>();
