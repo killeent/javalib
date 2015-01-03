@@ -2,6 +2,7 @@ package com.killeent.Tree;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Various algorithms that operate over trees.
@@ -42,7 +43,7 @@ public class Tree {
 
     /**
      * Generates a list of elements resulting from traversing the binary tree using
-     * a pre-order traversal.
+     * a recursive pre-order traversal.
      *
      * @param root The tree to traverse.
      * @return The list of elements in the order that they appear from a pre-order traversal.
@@ -66,7 +67,35 @@ public class Tree {
 
     /**
      * Generates a list of elements resulting from traversing the binary tree using
-     * a in-order traversal.
+     * an iterative pre-order traversal.
+     *
+     * @param root The tree to traverse.
+     * @return The list of elements in the order that they appear from a pre-order traversal.
+     */
+    private static <T> List<T> preOrderIterative(BinaryTreeNode<T> root) {
+        List<T> result = new LinkedList<T>();
+        if (root != null) {
+            Stack<BinaryTreeNode<T>> stack = new Stack<BinaryTreeNode<T>>();
+            stack.push(root);
+
+            while (!stack.isEmpty()) {
+                BinaryTreeNode<T> curr = stack.pop();
+                result.add(curr.getData());
+
+                if (curr.getRight() != null) {
+                    stack.push(curr.getRight());
+                }
+                if (curr.getLeft() != null) {
+                    stack.push(curr.getLeft());
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Generates a list of elements resulting from traversing the binary tree using
+     * a recursive in-order traversal.
      *
      * @param root The tree to traverse.
      * @return The list of elements in the order that they appear from a in-order traversal.
@@ -90,7 +119,56 @@ public class Tree {
 
     /**
      * Generates a list of elements resulting from traversing the binary tree using
-     * a post-order traversal.
+     * an iterative in-order traversal.
+     *
+     * @param root The tree to traverse.
+     * @return The list of elements in the order that they appear from a in-order traversal.
+     */
+    public static <T> List<T> inOrderIterative(BinaryTreeNode<T> root) {
+        List<T> result = new LinkedList<T>();
+        if (root != null) {
+            Stack<BinaryTreeNode<T>> stack = new Stack<BinaryTreeNode<T>>();
+            BinaryTreeNode<T> prev = null;
+            stack.push(root);
+
+            while (!stack.isEmpty()) {
+                BinaryTreeNode<T> curr = stack.peek();
+
+                if (prev == null || prev.getLeft() == curr || prev.getRight() == curr) {
+                    // going down
+                    if (curr.getLeft() != null) {
+                        // traverse left
+                        stack.push(curr.getLeft());
+                    } else if (curr.getRight() != null) {
+                        // place; recurse right
+                        result.add(curr.getData());
+                        stack.push(curr.getRight());
+                    } else {
+                        // leaf; pop and place
+                        stack.pop();
+                        result.add(curr.getData());
+                    }
+                } else if (curr.getLeft() == prev) {
+                    // returning from left; pop and place
+                    stack.pop();
+                    result.add(curr.getData());
+                    if (curr.getRight() != null) {
+                        // traverse right
+                        stack.push(curr.getRight());
+                    }
+                } else {
+                    // returning from right; simply pop
+                    stack.pop();
+                }
+                prev = curr;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Generates a list of elements resulting from traversing the binary tree using
+     * a recursive post-order traversal.
      *
      * @param root The tree to traverse.
      * @return The list of elements in the order that they appear from a post-order traversal.
@@ -110,5 +188,58 @@ public class Tree {
             postOrder(root.getRight(), result);
             result.add(root.getData());
         }
+    }
+
+    /**
+     * Generates a list of elements resulting from traversing the binary tree using
+     * an iterative post-order traversal.
+     *
+     * @param root The tree to traverse.
+     * @return The list of elements in the order that they appear from a post-order traversal.
+     */
+    public static <T> List<T> postOrderIterative(BinaryTreeNode<T> root) {
+        List<T> result = new LinkedList<T>();
+        if (root != null) {
+            Stack<BinaryTreeNode<T>> stack = new Stack<BinaryTreeNode<T>>();
+            stack.push(root);
+
+            BinaryTreeNode<T> prev = null;
+
+            while (!stack.isEmpty()) {
+                BinaryTreeNode<T> curr = stack.peek();
+
+                if (prev == null || prev.getLeft() == curr || prev.getRight() == curr) {
+                    // going down
+                    if (curr.getLeft() != null) {
+                        // traverse left
+                        stack.push(curr.getLeft());
+                    } else if (curr.getRight() != null) {
+                        // traverse right
+                        stack.push(curr.getRight());
+                    } else {
+                        // leaf node; pop and place
+                        stack.pop();
+                        result.add(curr.getData());
+                    }
+                } else if (curr.getLeft() == prev) {
+                    // returning from left child
+                    if (curr.getRight() != null) {
+                        // traverse right if we can
+                        stack.push(curr.getRight());
+                    } else {
+                        // otherwise pop and place
+                        stack.pop();
+                        result.add(curr.getData());
+                    }
+                } else {
+                    // returning from right child; pop and place
+                    stack.pop();
+                    result.add(curr.getData());
+                }
+
+                prev = curr;
+            }
+        }
+        return result;
     }
 }

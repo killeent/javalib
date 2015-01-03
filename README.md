@@ -47,5 +47,5 @@ Strings:
 * Knuth-Morris-Pratt matching
 
 Trees:
-* pre-, in- and post-order traversal
+* pre-, in- and post-order traversal (recursive & iterative)
 * binary tree symmetry
