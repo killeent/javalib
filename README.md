@@ -29,6 +29,7 @@ Arrays:
 * count inversions
 * remove duplicates
 * merge sort
+* minimum cover
 
 Graphs:
 * shortest path (BFS)

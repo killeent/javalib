@@ -1,7 +1,8 @@
 package com.killeent.Array;
 
-import java.util.Comparator;
-import java.util.Random;
+import com.killeent.Misc.Pair;
+
+import java.util.*;
 
 /**
  * Various searching and sorting algorithms for arrays.
@@ -441,5 +442,76 @@ public class Array {
                 arr[lo + k] = aux[k];
             }
         }
+    }
+
+    /**
+     * Given an input array and match array, minCover returns a pair of integers i, j
+     * such that input[i ... j] contains at least one occurrence of each element in match.
+     * The size j - i is guaranteed to be the smallest possible cover in input that satisfies
+     * these constraints.
+     *
+     * @param input Array to search for a cover in.
+     * @param match Elements we need to cover.
+     * @return A Pair of Integers i, j that satisfy the above constraints, or null if there
+     * is no cover, that is, some element in match cannot be found in input.
+     */
+    public static <T> Pair<Integer> minCover(T[] input, Set<T> match) {
+        // optimize for case where match is greater than input
+        if (match.size() > input.length) {
+            return null;
+        }
+
+        int i = 0;
+        int j = 0;
+        int min = -1;
+
+        Pair<Integer> result = null;
+
+        // keeps track of the number of occurrences of each word in match in input[i ... j]
+        Map<T, Integer> counts = new HashMap<T, Integer>();
+
+        while (j < input.length) {
+            // iterate j until we reach the end or cover all elements
+            while (j < input.length && counts.size() < match.size()) {
+                T candidate = input[j];
+                if (match.contains(candidate)) {
+                    // found a match; update count
+                    if (!counts.containsKey(candidate)) {
+                        counts.put(candidate, 1);
+                    } else {
+                        counts.put(candidate, counts.get(candidate));
+                    }
+                }
+                j++;
+            }
+
+            // iterate i while less than end and we cover all elements
+            while (i < j && counts.size() == match.size()) {
+                T candidate = input[i];
+                if (match.contains(candidate)) {
+                    // decrement count of element at i
+                    if (counts.get(candidate) == 1) {
+                        counts.remove(candidate);
+                        // if we will no longer satisfy the cover after this
+                        // point, check and see if we need to update the minimum
+                        if (min == -1 || j - 1 - i < min) {
+                            if (result == null) {
+                                // first time we found a valid cover
+                                result = new Pair<Integer>(i, j);
+                            } else {
+                                result.setFirst(i);
+                                result.setSecond(j);
+                            }
+                            min = j - 1 - i;
+                        }
+                    } else {
+                        counts.put(candidate, counts.get(candidate) - 1);
+                    }
+                }
+                i++;
+            }
+        }
+
+        return result;
     }
 }

@@ -412,4 +412,8 @@ public class ArrayTest {
             Assert.assertEquals(expected[i], input[i]);
         }
     }
+
+    /**
+     * TODO: add tests for {@link com.killeent.Array.Array#minCover(Object[], java.util.Set)}.
+     */
 }
