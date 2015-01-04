@@ -149,12 +149,14 @@ public class Tree {
                         result.add(curr.getData());
                     }
                 } else if (curr.getLeft() == prev) {
-                    // returning from left; pop and place
-                    stack.pop();
+                    // returning from left; place
                     result.add(curr.getData());
                     if (curr.getRight() != null) {
                         // traverse right
                         stack.push(curr.getRight());
+                    } else {
+                        // pop
+                        stack.pop();
                     }
                 } else {
                     // returning from right; simply pop
