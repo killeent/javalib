@@ -102,12 +102,12 @@ public class Graphs {
                 return distances.get(o1) - distances.get(o2);
             }
         });
-        queue.addAll(g.vertices());
+        queue.add(start);
 
         // Keep track of what we have discovered
         Set<V> discovered = new HashSet<V>();
 
-        while (queue.isEmpty()) {
+        while (!queue.isEmpty()) {
             V candidate = queue.remove();
 
             if (candidate.equals(end)) {
@@ -115,7 +115,7 @@ public class Graphs {
                 Edge<V, Integer> inEdge = parents.get(candidate);
 
                 while (inEdge != null) {
-                    path.add(inEdge);
+                    path.add(0, inEdge);
                     inEdge = parents.get(inEdge.getSource());
                 }
                 return true;
