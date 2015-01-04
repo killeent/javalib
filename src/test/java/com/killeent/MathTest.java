@@ -71,6 +71,10 @@ public class MathTest {
     }
 
     /**
+     * TODO: add tests for {@link com.killeent.Math.Math#sqrt(double, double)}
+     */
+
+    /**
      * Tests for {@link com.killeent.Math.Math#binomialCoefficient}.
      */
 

@@ -39,6 +39,7 @@ Graphs:
 
 Math:
 * power
+* square root
 * binomial coefficient
 * enumerate primes
 

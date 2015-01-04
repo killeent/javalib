@@ -37,6 +37,54 @@ public class Math {
     }
 
     /**
+     * Calculates the sqrt of the input within the specified epsilon, i.e. the result^2
+     * is less than epsilon away from input. Makes use of no mathematical constructs, just
+     * simply performs binary search.
+     *
+     * @param input The double-precision number to calculate a sqrt for.
+     * @param epsilon The result squared will be less than epsilon away from input.
+     * @throws java.lang.IllegalArgumentException if input, epsilon is < 0.
+     * @return A sqrt estimate of input.
+     */
+    public static double sqrt(double input, double epsilon) {
+        if (input < 0 || epsilon < 0) {
+            throw new IllegalArgumentException("negative input to sqrt");
+        }
+
+        double lo;
+        double hi;
+
+        if (input < 1.0) {
+            lo = input;
+            hi = 1.0;
+        } else {
+            lo = 1.0;
+            hi = input;
+        }
+
+        while (lo < hi) {
+            double mid = lo + (hi-lo)/2.0;
+            double estimate = mid * mid;
+            if (abs(estimate - input) < epsilon) {
+                return mid;
+            } else if (estimate > input) {
+                hi = estimate;
+            } else {
+                lo = estimate;
+            }
+        }
+
+        return lo;
+    }
+
+    /**
+     * @return The absolute value of input.
+     */
+    private static double abs(double input) {
+        return input >= 0 ? input : -input;
+    }
+
+    /**
      * Computes the binomial coefficient aka 'n choose k'. This is equivalent
      * to finding the number of distinct subsets of size k when picking from
      * a set of n elements.
