@@ -68,9 +68,9 @@ public class Math {
             if (abs(estimate - input) < epsilon) {
                 return mid;
             } else if (estimate > input) {
-                hi = estimate;
+                hi = mid;
             } else {
-                lo = estimate;
+                lo = mid;
             }
         }
 

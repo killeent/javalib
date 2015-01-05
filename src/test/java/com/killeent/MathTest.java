@@ -71,8 +71,53 @@ public class MathTest {
     }
 
     /**
-     * TODO: add tests for {@link com.killeent.Math.Math#sqrt(double, double)}
+     * Tests for {@link com.killeent.Math.Math#sqrt(double, double)}.
      */
+
+    /**
+     * Tests for {@link java.lang.NullPointerException} if input is negative.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testSqrtNegativeInput() {
+        Math.sqrt(-1, 0);
+    }
+
+    /**
+     * Tests for {@link java.lang.NullPointerException} if epsilon is negative.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testSqrtNegativeEpsilon() {
+        Math.sqrt(0, -1);
+    }
+
+    /**
+     * Tests for square roots less than 1.0.
+     */
+    @Test
+    public void testSqrtInputLessThanOne() {
+        double delta = 0.01;     // for junit
+        double epsilon = 0.0001; // for sqrt
+
+        Assert.assertEquals(0, Math.sqrt(0, epsilon), delta);
+        Assert.assertEquals(0.9, Math.sqrt(0.81, epsilon), delta);
+        Assert.assertEquals(0.7, Math.sqrt(0.49, epsilon), delta);
+        Assert.assertEquals(0.8062, Math.sqrt(0.65, epsilon), delta);
+    }
+
+    /**
+     * Tests for square roots greater than or equal to 1.0.
+     */
+    @Test
+    public void testSqrtInputGreaterThanOrEqualToOne() {
+        double delta = 0.01;     // for junit
+        double epsilon = 0.0001; // for sqrt
+
+        Assert.assertEquals(1.0, Math.sqrt(1.0, epsilon), delta);
+        Assert.assertEquals(2.0, Math.sqrt(4.0, epsilon), delta);
+        Assert.assertEquals(5.0, Math.sqrt(25.0, epsilon), delta);
+        Assert.assertEquals(1.5, Math.sqrt(2.25, epsilon), delta);
+        Assert.assertEquals(6.11089, Math.sqrt(37.343, epsilon), delta);
+    }
 
     /**
      * Tests for {@link com.killeent.Math.Math#binomialCoefficient}.
