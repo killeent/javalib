@@ -545,4 +545,8 @@ public class ArrayTest {
         Assert.assertEquals(expected, Array.minCover(input, match));
     }
 
+    /**
+     * todo: Tests for {@link com.killeent.Array.Array#permutations(Object[])}.
+     */
+
 }

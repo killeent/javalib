@@ -514,4 +514,42 @@ public class Array {
 
         return result;
     }
+
+    /**
+     * Returns a set of all the permutations of the input array. Can handle
+     * arrays with duplicate entries. Time complexity O(n!), space complexity
+     * O(k!) where k is the number of unique elements.
+     *
+     * @param arr The array to permute.
+     * @return A set of permutation of arr.
+     */
+    public static <T> Set<List<T>> permutations(T[] arr) {
+        Set<List<T>> result = new HashSet<List<T>>();
+        permutations(arr, 0, result);
+        return result;
+    }
+
+    /**
+     * Recursive helper function for permutations.
+     *
+     * @param arr The array to permute.
+     * @param k We are picking the (k+1)th element for this permutation.
+     * @param result Tracks permutations.
+     */
+    private static <T> void permutations(T[] arr, int k, Set<List<T>> result) {
+        if (k == arr.length) {
+            result.add(Arrays.asList(arr));
+        } else {
+            Set<T> seen = new HashSet<T>();
+            for (int i = k; i < arr.length; i++) {
+                if (!seen.contains(arr[i])) {
+                    swap(arr, i, k);
+                    permutations(arr, k+1, result);
+                    swap(arr, i, k);
+                    seen.add(arr[i]);
+                }
+            }
+        }
+    }
+
 }

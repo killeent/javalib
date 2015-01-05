@@ -30,6 +30,7 @@ Arrays:
 * remove duplicates
 * merge sort
 * minimum cover
+* generate permutations
 
 Graphs:
 * shortest path (BFS)
