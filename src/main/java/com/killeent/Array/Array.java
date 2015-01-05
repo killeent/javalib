@@ -446,7 +446,7 @@ public class Array {
 
     /**
      * Given an input array and match array, minCover returns a pair of integers i, j
-     * such that input[i ... j] contains at least one occurrence of each element in match.
+     * such that input[i ... j-1] contains at least one occurrence of each element in match.
      * The size j - i is guaranteed to be the smallest possible cover in input that satisfies
      * these constraints.
      *
@@ -479,7 +479,7 @@ public class Array {
                     if (!counts.containsKey(candidate)) {
                         counts.put(candidate, 1);
                     } else {
-                        counts.put(candidate, counts.get(candidate));
+                        counts.put(candidate, counts.get(candidate) + 1);
                     }
                 }
                 j++;

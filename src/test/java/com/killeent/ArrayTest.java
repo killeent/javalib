@@ -1,9 +1,13 @@
 package com.killeent;
 
 import com.killeent.Array.Array;
+import com.killeent.Misc.Pair;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Tests for {@link com.killeent.Array.Array}.
@@ -414,6 +418,131 @@ public class ArrayTest {
     }
 
     /**
-     * TODO: add tests for {@link com.killeent.Array.Array#minCover(Object[], java.util.Set)}.
+     * Tests for {@link com.killeent.Array.Array#minCover(Object[], java.util.Set)}.
      */
+
+    /**
+     * Tests for a null min cover when the match is bigger than input.
+     */
+    @Test
+    public void testMinCoverLargerMatch() {
+        Integer[] input = new Integer[0];
+        Set<Integer> match = new HashSet<Integer>();
+        match.add(1);
+        Assert.assertNull(Array.minCover(input, match));
+    }
+
+    /**
+     * Tests for a min cover for a single element input.
+     */
+    @Test
+    public void testMinCoverSingleElementInput() {
+        Integer[] input = new Integer[]{1};
+
+        // cover found
+        Set<Integer> match = new HashSet<Integer>();
+        match.add(1);
+        Pair<Integer> expected = new Pair<Integer>(0, 1);
+        Assert.assertEquals(expected, Array.minCover(input, match));
+
+        // no cover
+        match.clear();
+        match.add(2);
+        Assert.assertNull(Array.minCover(input, match));
+    }
+
+    /**
+     * Tests for a min cover for multi element input.
+     */
+    @Test
+    public void testMinCoverMultiElementInput() {
+        Integer[] input = new Integer[]{1, 2, 3};
+
+        // cover found (single element)
+        Set<Integer> match = new HashSet<Integer>();
+        match.add(1);
+        Pair<Integer> expected = new Pair<Integer>(0, 1);
+        Assert.assertEquals(expected, Array.minCover(input, match));
+
+        match.clear();
+        match.add(2);
+        expected = new Pair<Integer>(1, 2);
+        Assert.assertEquals(expected, Array.minCover(input, match));
+
+        match.clear();
+        match.add(3);
+        expected = new Pair<Integer>(2, 3);
+        Assert.assertEquals(expected, Array.minCover(input, match));
+
+        // cover found (two elements)
+        match.clear();
+        TestUtil.addArrayElementsToCollection(match, 1, 2);
+        expected = new Pair<Integer>(0, 2);
+        Assert.assertEquals(expected, Array.minCover(input, match));
+
+        match.clear();
+        TestUtil.addArrayElementsToCollection(match, 1, 3);
+        expected = new Pair<Integer>(0, 3);
+        Assert.assertEquals(expected, Array.minCover(input, match));
+
+        match.clear();
+        TestUtil.addArrayElementsToCollection(match, 2, 3);
+        expected = new Pair<Integer>(1, 3);
+        Assert.assertEquals(expected, Array.minCover(input, match));
+
+        // cover found (all elements)
+        match.clear();
+        TestUtil.addArrayElementsToCollection(match, 1, 2, 3);
+        expected = new Pair<Integer>(0, 3);
+        Assert.assertEquals(expected, Array.minCover(input, match));
+
+        // no cover (single element)
+        match.clear();
+        match.add(4);
+        Assert.assertNull(Array.minCover(input, match));
+
+        // no cover (multiple elements, all not in input)
+        match.clear();
+        TestUtil.addArrayElementsToCollection(match, 5, 6);
+        Assert.assertNull(Array.minCover(input, match));
+
+        // no cover (multiple elements, one not in input)
+        match.clear();
+        TestUtil.addArrayElementsToCollection(match, 1, 4);
+        Assert.assertNull(Array.minCover(input, match));
+
+        // // no cover (multiple elements, multiple not in input)
+        match.clear();
+        TestUtil.addArrayElementsToCollection(match, 2, 4, 5);
+        Assert.assertNull(Array.minCover(input, match));
+    }
+
+    /**
+     * Tests for the optimality of minCover - i.e. it finds the smallest cover as
+     * specified by its i, j values.
+     */
+    @Test
+    public void testMinCoverOptimality() {
+        // optimal at beginning
+        Integer[] input = new Integer[]{1, 2, 3, 1, 1, 1, 2, 2, 3};
+        Set<Integer> match = new HashSet<Integer>();
+        TestUtil.addArrayElementsToCollection(match, 1, 2, 3);
+        Pair<Integer> expected = new Pair<Integer>(0, 3);
+        Assert.assertEquals(expected, Array.minCover(input, match));
+
+        // optimal in middle
+        input = new Integer[]{1, 1, 1, 2, 2, 3, 3, 1, 2, 2, 3, 2, 2, 1, 1, 2, 2, 3};
+        match.clear();
+        TestUtil.addArrayElementsToCollection(match, 1, 2, 3);
+        expected = new Pair<Integer>(6, 9);
+        Assert.assertEquals(expected, Array.minCover(input, match));
+
+        // optimal at end
+        input = new Integer[]{1, 1, 1, 2, 2, 3, 3, 3, 3, 1, 2};
+        match.clear();
+        TestUtil.addArrayElementsToCollection(match, 1, 2, 3);
+        expected = new Pair<Integer>(8, 11);
+        Assert.assertEquals(expected, Array.minCover(input, match));
+    }
+
 }

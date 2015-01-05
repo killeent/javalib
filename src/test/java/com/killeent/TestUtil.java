@@ -2,6 +2,7 @@ package com.killeent;
 
 import junit.framework.Assert;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -30,6 +31,12 @@ public class TestUtil {
         Assert.assertEquals("mismatched list sizes", expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
             Assert.assertEquals(expected.get(i), actual.get(i));
+        }
+    }
+
+    public static <T> void addArrayElementsToCollection(Collection<T> collection, T... arr) {
+        for (int i = 0; i < arr.length; i++) {
+            collection.add(arr[i]);
         }
     }
 
