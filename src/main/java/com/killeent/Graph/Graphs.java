@@ -1,5 +1,7 @@
 package com.killeent.Graph;
 
+import com.killeent.Misc.Pair;
+
 import java.util.*;
 
 /**
@@ -147,7 +149,99 @@ public class Graphs {
         return false;
     }
 
+    /**
+     * Performs a modified Djikstra's algorithm on the input graph with non-negative integer edges
+     * to find a shortest (both weight and length) path between two vertices, if one exists.
+     *
+     * @param g The graph to search.
+     * @param start The start node to consider.
+     * @param end The node to find the shortest path to.
+     * @param path An output parameter where the shortest path will be stored in one
+     *             exists.
+     * @throws java.lang.IllegalArgumentException if any passed parameters are null.
+     * @throws java.lang.IllegalArgumentException if start or end isn't in the graph.
+     * @return True if start and end are connected, otherwise false.
+     */
+    public static <V extends Comparable<V>> boolean shortestDjikstras(
+            SimpleLabeledGraph<V, Integer> g, V start, V end, List<Edge<V, Integer>> path) {
+        if (g == null || start == null || end == null || path == null) {
+            throw new IllegalArgumentException("null arguments to shortest path");
+        }
+        if (!g.containsVertex(start) || !g.containsVertex(end)) {
+            throw new IllegalArgumentException("vertex missing from graph");
+        }
 
+        final Map<V, Pair<Integer>> distances = new HashMap<V, Pair<Integer>>();
+        Map<V, Edge<V, Integer>> parents = new HashMap<V, Edge<V, Integer>>();
+        for (V vertex : g.vertices()) {
+            distances.put(vertex, new Pair<Integer>(Integer.MAX_VALUE, Integer.MAX_VALUE));
+            parents.put(vertex, null);
+        }
+        distances.put(start, new Pair<Integer>(0, 0));
+
+        Comparator<V> vertexComparator = new Comparator<V>() {
+            @Override
+            public int compare(V o1, V o2) {
+                Pair<Integer> p1 = distances.get(o1);
+                Pair<Integer> p2 = distances.get(o2);
+
+                // order by distance first, then the number of edges
+                if (p1.getFirst() != p2.getFirst()) {
+                    return p1.getFirst() - p2.getFirst();
+                } else {
+                    return p1.getSecond() - p2.getSecond();
+                }
+            }
+        };
+
+        PriorityQueue<V> queue = new PriorityQueue<V>(11, vertexComparator);
+        queue.add(start);
+
+        Set<V> discovered = new HashSet<V>();
+
+        while (!queue.isEmpty()) {
+            V candidate = queue.remove();
+
+            if (candidate.equals(end)) {
+                // rebuild path
+                Edge<V, Integer> inEdge = parents.get(candidate);
+
+                while (inEdge != null) {
+                    path.add(0, inEdge);
+                    inEdge = parents.get(inEdge.getSource());
+                }
+                return true;
+            }
+            discovered.add(candidate);
+
+            Pair<Integer> candidateDistance = distances.get(candidate);
+            for (Edge<V, Integer> edge : g.neighbors(candidate)) {
+                V neighbor = edge.getDestination();
+                if (!discovered.contains(neighbor)) {
+                    // if the distance from source to this node + the edge distance is less
+                    // than the current distance for the neighbor, or if the distance is
+                    // the same but the number of edges in the path from the source to this node
+                    // is less than the current number, update its distance and set candidate
+                    // to the parent
+                    Pair<Integer> oldDistance = distances.get(neighbor);
+                    Pair<Integer> newDistance = new Pair<Integer>(
+                            candidateDistance.getFirst() + edge.getValue(),
+                            candidateDistance.getSecond() + 1);
+                    if (newDistance.getFirst() < oldDistance.getFirst() ||
+                            (newDistance.getFirst().equals(oldDistance.getFirst()) &&
+                                    newDistance.getSecond() < oldDistance.getSecond())) {
+                        distances.put(neighbor, newDistance);
+                        parents.put(neighbor, edge);
+
+                        // approximate decreaseKey
+                        queue.remove(neighbor);
+                        queue.add(neighbor);
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * Leverages DFS to detect the presence of a cycle in an undirected graph, if

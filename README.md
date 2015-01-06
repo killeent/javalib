@@ -35,6 +35,7 @@ Arrays:
 Graphs:
 * shortest path (BFS)
 * shortest path (Djikstra)
+* shortest path (min cost & length)
 * cycle detection
 * find articulation vertices
 * topological sort (DAG)
