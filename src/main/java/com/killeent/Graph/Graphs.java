@@ -153,6 +153,9 @@ public class Graphs {
      * Performs a modified Djikstra's algorithm on the input graph with non-negative integer edges
      * to find a shortest (both weight and length) path between two vertices, if one exists.
      *
+     * Given a weighted graph where the shortest paths all have the same number of edges, performs
+     * the same as Djikstra's algorithm.
+     *
      * @param g The graph to search.
      * @param start The start node to consider.
      * @param end The node to find the shortest path to.

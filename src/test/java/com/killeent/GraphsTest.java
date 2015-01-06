@@ -199,6 +199,8 @@ public class GraphsTest {
 
     /**
      * Tests for {@link com.killeent.Graph.Graphs#djikstrasPath(
+     * com.killeent.Graph.SimpleLabeledGraph, Comparable, Comparable, java.util.List)} and
+     * {@link com.killeent.Graph.Graphs#shortestDjikstras(
      * com.killeent.Graph.SimpleLabeledGraph, Comparable, Comparable, java.util.List)}.
      */
 
@@ -261,12 +263,74 @@ public class GraphsTest {
     }
 
     /**
+     * Tests for {@link java.lang.IllegalArgumentException} if passing in a null
+     * graph.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testShortestDjikstrasNullGraph() {
+        Graphs.shortestDjikstras(null, 1, 2, llInstance);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if passing in a null
+     * start vertex.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testShortestDjikstrasNullStart() {
+        Graphs.shortestDjikstras(graph, null, 2, llInstance);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if passing in a null
+     * end vertex.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testShortestDjikstrasNullEnd() {
+        Graphs.shortestDjikstras(graph, 1, null, llInstance);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if passing in a null
+     * edge list.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testShortestDjikstrasNullEdgeList() {
+        Graphs.shortestDjikstras(graph, 1, 2, null);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if passing in a start
+     * vertex not in the graph.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testShortestDjikstrasMissingStart() {
+        graph.addVertex(2);
+        Graphs.shortestDjikstras(graph, 1, 2, llInstance);
+        graph.clear();
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if passing in a end
+     * vertex not in the graph.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testShortestDjikstrasMissingEnd() {
+        graph.addVertex(1);
+        Graphs.shortestDjikstras(graph, 1, 2, llInstance);
+        graph.clear();
+    }
+
+    /**
      * Tests finding the shortest path to self.
      */
     @Test
     public void testDjikstrasToSelf() {
         graph.addVertex(1);
         Assert.assertTrue(Graphs.djikstrasPath(graph, 1, 1, llInstance));
+        Assert.assertTrue(llInstance.isEmpty());
+        llInstance.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(graph, 1, 1, llInstance));
         Assert.assertTrue(llInstance.isEmpty());
         graph.clear();
         llInstance.clear();
@@ -280,6 +344,9 @@ public class GraphsTest {
         graph.addVertex(1);
         graph.addVertex(2);
         Assert.assertFalse(Graphs.djikstrasPath(graph, 1, 2, llInstance));
+        llInstance.clear();
+
+        Assert.assertFalse(Graphs.shortestDjikstras(graph, 1, 2, llInstance));
         graph.clear();
         llInstance.clear();
     }
@@ -293,6 +360,10 @@ public class GraphsTest {
         graph.addVertex(2);
         graph.addEdge(1, 2, 1);
         Assert.assertTrue(Graphs.djikstrasPath(graph, 1, 2, llInstance));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 1)));
+        llInstance.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(graph, 1, 2, llInstance));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 1)));
         graph.clear();
         llInstance.clear();
@@ -309,6 +380,12 @@ public class GraphsTest {
         graph.addEdge(1, 2, 1);
         graph.addEdge(2, 3, 2);
         Assert.assertTrue(Graphs.djikstrasPath(graph, 1, 3, llInstance));
+        Assert.assertEquals(2, llInstance.size());
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 1)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(2, 3, 2)));
+        llInstance.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(graph, 1, 3, llInstance));
         Assert.assertEquals(2, llInstance.size());
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 1)));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(2, 3, 2)));
@@ -330,6 +407,12 @@ public class GraphsTest {
         graph.addEdge(1, 3, 2);
         graph.addEdge(3, 4, 2);
         Assert.assertTrue(Graphs.djikstrasPath(graph, 1, 4, llInstance));
+        Assert.assertEquals(2, llInstance.size());
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 1)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(2, 4, 2)));
+        llInstance.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(graph, 1, 4, llInstance));
         Assert.assertEquals(2, llInstance.size());
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 1)));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(2, 4, 2)));
@@ -362,7 +445,15 @@ public class GraphsTest {
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(3, 4, 1)));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(4, 5, 1)));
         Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(5, 6, 2)));
-        graph.clear();
+        llInstance.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(graph, 1, 6, llInstance));
+        Assert.assertEquals(5, llInstance.size());
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 2, 1)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(2, 3, 2)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(3, 4, 1)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(4, 5, 1)));
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(5, 6, 2)));
         llInstance.clear();
     }
 
@@ -414,87 +505,134 @@ public class GraphsTest {
         g.addEdge('h', 'j', 6);
 
         // s to a
-        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'a', list));
-        Assert.assertEquals(1, list.size());
         List<Edge<Character, Integer>> expected = Arrays.asList(
                 new Edge<Character, Integer>('s', 'a', 2));
+
+        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'a', list));
+        Assert.assertEquals(1, list.size());
         TestUtil.assertListEquals(expected, list);
         list.clear();
 
+        Assert.assertTrue(Graphs.shortestDjikstras(g, 's', 'a', list));
+        Assert.assertEquals(1, list.size());
+        TestUtil.assertListEquals(expected, list);
+        list.clear();
+
+
         // s to c
-        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'c', list));
-        Assert.assertEquals(2, list.size());
         expected = Arrays.asList(
                 new Edge<Character, Integer>('s', 'a', 2),
                 new Edge<Character, Integer>('a', 'c', 5));
+
+        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'c', list));
+        Assert.assertEquals(2, list.size());
+        TestUtil.assertListEquals(expected, list);
+        list.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(g, 's', 'c', list));
+        Assert.assertEquals(2, list.size());
         TestUtil.assertListEquals(expected, list);
         list.clear();
 
         // s to e
-        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'e', list));
-        Assert.assertEquals(2, list.size());
         expected = Arrays.asList(
                 new Edge<Character, Integer>('s', 'a', 2),
                 new Edge<Character, Integer>('a', 'e', 1));
+
+        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'e', list));
+        Assert.assertEquals(2, list.size());
+        TestUtil.assertListEquals(expected, list);
+        list.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(g, 's', 'e', list));
+        Assert.assertEquals(2, list.size());
         TestUtil.assertListEquals(expected, list);
         list.clear();
 
         // s to g
-        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'g', list));
-        Assert.assertEquals(3, list.size());
         expected = Arrays.asList(
                 new Edge<Character, Integer>('s', 'a', 2),
                 new Edge<Character, Integer>('a', 'c', 5),
                 new Edge<Character, Integer>('c', 'g', 4));
+
+        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'g', list));
+        Assert.assertEquals(3, list.size());
+        TestUtil.assertListEquals(expected, list);
+        list.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(g, 's', 'g', list));
+        Assert.assertEquals(3, list.size());
         TestUtil.assertListEquals(expected, list);
         list.clear();
 
         // s to f
-        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'f', list));
-        Assert.assertEquals(3, list.size());
         expected = Arrays.asList(
                 new Edge<Character, Integer>('s', 'a', 2),
                 new Edge<Character, Integer>('a', 'c', 5),
                 new Edge<Character, Integer>('c', 'f', 1));
+
+        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'f', list));
+        Assert.assertEquals(3, list.size());
+        TestUtil.assertListEquals(expected, list);
+        list.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(g, 's', 'f', list));
+        Assert.assertEquals(3, list.size());
         TestUtil.assertListEquals(expected, list);
         list.clear();
 
         // s to h
-        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'h', list));
-        Assert.assertEquals(3, list.size());
         expected = Arrays.asList(
                 new Edge<Character, Integer>('s', 'a', 2),
                 new Edge<Character, Integer>('a', 'e', 1),
                 new Edge<Character, Integer>('e', 'h', 2));
+
+        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'h', list));
+        Assert.assertEquals(3, list.size());
+        TestUtil.assertListEquals(expected, list);
+        list.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(g, 's', 'h', list));
+        Assert.assertEquals(3, list.size());
         TestUtil.assertListEquals(expected, list);
         list.clear();
 
         // s to j
-        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'j', list));
-        Assert.assertEquals(4, list.size());
         expected = Arrays.asList(
                 new Edge<Character, Integer>('s', 'a', 2),
                 new Edge<Character, Integer>('a', 'c', 5),
                 new Edge<Character, Integer>('c', 'f', 1),
                 new Edge<Character, Integer>('f', 'j', 2));
+
+        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'j', list));
+        Assert.assertEquals(4, list.size());
+        TestUtil.assertListEquals(expected, list);
+        list.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(g, 's', 'j', list));
+        Assert.assertEquals(4, list.size());
         TestUtil.assertListEquals(expected, list);
         list.clear();
 
         // s to b
-        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'b', list));
-        Assert.assertEquals(5, list.size());
         expected = Arrays.asList(
                 new Edge<Character, Integer>('s', 'a', 2),
                 new Edge<Character, Integer>('a', 'c', 5),
                 new Edge<Character, Integer>('c', 'f', 1),
                 new Edge<Character, Integer>('f', 'j', 2),
                 new Edge<Character, Integer>('j', 'b', 2));
+
+        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'b', list));
+        Assert.assertEquals(5, list.size());
+        TestUtil.assertListEquals(expected, list);
+        list.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(g, 's', 'b', list));
+        Assert.assertEquals(5, list.size());
         TestUtil.assertListEquals(expected, list);
         list.clear();
 
         // s to d
-        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'd', list));
-        Assert.assertEquals(6, list.size());
         expected = Arrays.asList(
                 new Edge<Character, Integer>('s', 'a', 2),
                 new Edge<Character, Integer>('a', 'c', 5),
@@ -502,11 +640,37 @@ public class GraphsTest {
                 new Edge<Character, Integer>('f', 'j', 2),
                 new Edge<Character, Integer>('j', 'b', 2),
                 new Edge<Character, Integer>('b', 'd', 1));
+
+        Assert.assertTrue(Graphs.djikstrasPath(g, 's', 'd', list));
+        Assert.assertEquals(6, list.size());
+        TestUtil.assertListEquals(expected, list);
+        list.clear();
+
+        Assert.assertTrue(Graphs.shortestDjikstras(g, 's', 'd', list));
+        Assert.assertEquals(6, list.size());
         TestUtil.assertListEquals(expected, list);
         list.clear();
     }
 
+    /**
+     * Tests for finding the min length path when two path costs are equals for
+     * shortestDjikstra's.
+     */
+    @Test
+    public void testShortestDjikstasSameCost() {
+        graph.addVertex(1);
+        graph.addVertex(2);
+        graph.addVertex(3);
+        graph.addVertex(4);
+        
+        graph.addEdge(1, 3, 2);
+        graph.addEdge(1, 2, 1);
+        graph.addEdge(2, 3, 1);
 
+        Assert.assertTrue(Graphs.shortestDjikstras(graph, 1, 3, llInstance));
+        Assert.assertEquals(1, llInstance.size());
+        Assert.assertTrue(llInstance.contains(new Edge<Integer, Integer>(1, 3, 2)));
+    }
 
     /**
      * Tests for {@link com.killeent.Graph.Graphs#containsCycle}.
