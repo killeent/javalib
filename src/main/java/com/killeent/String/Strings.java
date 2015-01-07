@@ -1,5 +1,8 @@
 package com.killeent.String;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Various algorithms that operate over {@link java.lang.String}.
  *
@@ -146,6 +149,89 @@ public class Strings {
         }
 
         return table;
+    }
+
+    /**
+     * Given two strings that represent integers, i.e. that match:
+     *
+     * ^-?[0-9]+$
+     *
+     * Returns a string representation of result of multiplying the two strings.
+     *
+     * @param a A string representation of an integer.
+     * @param b A string representation of an integer.
+     * @throws java.lang.IllegalArgumentException if a or b is null.
+     * @throws java.lang.IllegalArgumentException if a or b is not formatted as an integer.
+     * @return The string representation of the multiplication of the two input integers.
+     */
+    public static String multiply(String a, String b) {
+        if (a == null || b == null) {
+            throw new IllegalArgumentException("null input to string multiplication");
+        }
+        Pattern integer = Pattern.compile("^-?[0-9]+$");
+        Matcher matcher = integer.matcher(a);
+        if (!matcher.find()) {
+            throw new IllegalArgumentException("input string a is improperly formatted");
+        }
+        matcher =integer.matcher(b);
+        if (!matcher.find()) {
+            throw new IllegalArgumentException("input string a is improperly formatted");
+        }
+
+        // okay, we have valid input; check and see if our result is negative
+        boolean negative = false;
+        if (a.charAt(0) == '-') {
+            negative = true;
+            a = a.substring(1);
+        }
+        if (b.charAt(0) == '-') {
+            negative = !negative;
+            b = b.substring(1);
+        }
+
+        // we will compute our result as an int[], where position 0 into the array represents
+        // the least significant digit in a base10 integer. This array will contain at most
+        // ak * bk entries, where ak is the number of digits in a, and bk the number of digits
+        // in b. We add 1 to this to make our multiplication easier
+        int[] result = new int[a.length() + b.length() + 1];
+
+        // now perform the multiplication: we multiply each digit of number a with the entirety
+        // of number b and sum the results; implicitly i and j keep track of the 10s, 100s, 1000s
+        // etc.
+        for (int i = 0; i < a.length(); i++) {
+            for (int j = 0; j < b.length(); j++) {
+                result[i + j] +=
+                        (a.charAt(a.length() - 1 - i) - '0') *
+                        (b.charAt(b.length() - 1 - j) - '0');
+                result[i + j + 1] += result[i + j] / 10;
+                result[i + j] = result[i + j] % 10;
+            }
+        }
+
+        // now convert to a string; we start at the highest non-zero index in result
+        StringBuilder sb = new StringBuilder();
+        int i = result.length - 1;
+
+        while(result[i] == 0 && i >= 0) {
+            i--;
+        }
+
+        // edge case the result is all zeroes
+        if (i == -1) {
+            return "0";
+        }
+
+        while(i >= 0) {
+            sb.append(result[i]);
+            i--;
+        }
+
+        // add in negative if necessary
+        if (negative) {
+            sb.insert(0, '-');
+        }
+
+        return sb.toString();
     }
 
 }

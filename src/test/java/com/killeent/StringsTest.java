@@ -181,4 +181,8 @@ public class StringsTest {
         }
     }
 
+    /**
+     * todo: add tests for {@link com.killeent.String.Strings#multiply(String, String)}.
+     */
+
 }

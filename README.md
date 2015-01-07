@@ -50,6 +50,7 @@ Math:
 Strings:
 * palindrome
 * Knuth-Morris-Pratt matching
+* multiply integer representations
 
 Trees:
 * pre-, in- and post-order traversal (recursive & iterative)
