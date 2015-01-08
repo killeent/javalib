@@ -2,9 +2,7 @@ package com.killeent;
 
 import junit.framework.Assert;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Various utility functions and classes for testing purposes.
@@ -34,9 +32,27 @@ public class TestUtil {
         }
     }
 
+    /**
+     * Adds the specified array elements to the collection.
+     */
     public static <T> void addArrayElementsToCollection(Collection<T> collection, T... arr) {
         for (int i = 0; i < arr.length; i++) {
             collection.add(arr[i]);
+        }
+    }
+
+    /**
+     * Asserts that the array contains the specified elements.
+     */
+    public static <T> void assertArrayContains(T[] arr, T... elements) {
+        Set<T> missing = new HashSet<T>(Arrays.asList(elements));
+        for (int i = 0; i < arr.length; i++) {
+            if (missing.contains(arr[i])) {
+                missing.remove(arr[i]);
+            }
+        }
+        if (missing.size() > 0) {
+            Assert.fail("array missing elements");
         }
     }
 

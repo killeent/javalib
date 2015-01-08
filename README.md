@@ -31,6 +31,7 @@ Arrays:
 * remove duplicates
 * merge sort
 * minimum cover
+* permute in-place
 * generate permutations
 
 Graphs:

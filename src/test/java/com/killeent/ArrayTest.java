@@ -546,6 +546,38 @@ public class ArrayTest {
     }
 
     /**
+     * Tests for {@link com.killeent.Array.Array#permute(Object[])}.
+     */
+
+    /**
+     * Tests that permute doesn't crash on an empty array.
+     */
+    @Test
+    public void testPermuteEmptyArray() {
+        Array.permute(new Integer[0]);
+    }
+
+    /**
+     * Tests that permute doesn't modify a single element array.
+     */
+    @Test
+    public void testPermuteSingleElementArray() {
+        Integer[] arr = new Integer[]{0};
+        Array.permute(arr);
+        Assert.assertEquals(0, (int)arr[0]);
+    }
+
+    /**
+     * Tests that permute doesn't change the elements in a multi-element array.
+     */
+    @Test
+    public void testPermuteMultiElementArray() {
+        Integer[] arr = new Integer[]{1, 2, 3, 4, 5};
+        Array.permute(arr);
+        TestUtil.assertArrayContains(arr, 1, 2, 3, 4, 5);
+    }
+
+    /**
      * todo: Tests for {@link com.killeent.Array.Array#permutations(Object[])}.
      */
 

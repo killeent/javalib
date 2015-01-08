@@ -516,6 +516,22 @@ public class Array {
     }
 
     /**
+     * Pseudo-randomly permutes the elements of array. Internally uses a random
+     * number generator.
+     *
+     * @param arr Array whose elements will be permuted.
+     */
+    public static <T> void permute(T[] arr) {
+        Random r = new Random();
+        int n = arr.length;
+        while (n > 1) {
+            int index = r.nextInt(n);
+            swap(arr, index, n-1);
+            n--;
+        }
+    }
+
+    /**
      * Returns a set of all the permutations of the input array. Can handle
      * arrays with duplicate entries. Time complexity O(n!), space complexity
      * O(k!) where k is the number of unique elements.
