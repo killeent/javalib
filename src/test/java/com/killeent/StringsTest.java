@@ -185,4 +185,72 @@ public class StringsTest {
      * todo: add tests for {@link com.killeent.String.Strings#multiply(String, String)}.
      */
 
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if passing in a null a string.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testMultiplyStringsNullA() {
+        Strings.multiply(null, "0");
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if passing in a null b string.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testMultiplyStringsNullB() {
+        Strings.multiply("0", null);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing in a non-numeric
+     * a string.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testMultiplyStringsInvalidA() {
+        Strings.multiply("hello", "0");
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing in a non-numeric
+     * a string.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testMultiplyStringsInvalidB() {
+        Strings.multiply("0", "hello");
+    }
+
+    /**
+     * Tests multiplying things by zero.
+     */
+    @Test
+    public void testMultiplyStringsByZero() {
+        Assert.assertEquals("0", Strings.multiply("0", "0"));
+        Assert.assertEquals("0", Strings.multiply("0", "5"));
+        Assert.assertEquals("0", Strings.multiply("5", "0"));
+        Assert.assertEquals("0", Strings.multiply("0", "-10"));
+        Assert.assertEquals("0", Strings.multiply("-10", "0"));
+    }
+
+    /**
+     * Tests multiplying things by one.
+     */
+    @Test
+    public void testMultiplyStringsByOne() {
+        Assert.assertEquals("1", Strings.multiply("1", "1"));
+        Assert.assertEquals("5", Strings.multiply("1", "5"));
+        Assert.assertEquals("5", Strings.multiply("5", "1"));
+        Assert.assertEquals("-10", Strings.multiply("1", "-10"));
+        Assert.assertEquals("-10", Strings.multiply("-10", "1"));
+    }
+
+    // todo: finish these tests
+
+    /**
+     * Tests multiplying double negatives yields a positive result.
+     */
+    @Test
+    public void testMultiplyStringsBothNegative() {
+
+    }
+
 }
