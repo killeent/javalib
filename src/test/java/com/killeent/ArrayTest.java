@@ -6,7 +6,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -582,7 +584,83 @@ public class ArrayTest {
      */
 
     /**
-     * todo: Tests for {@link com.killeent.Array.Array#subset(Object[], int)}.
+     * Tests for {@link com.killeent.Array.Array#subset(Object[], int)}.
      */
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing in a null array.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testSubsetNullArray() {
+        Array.subset(null, 0);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing in a negative k value.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testSubsetNegativeK() {
+        Array.subset(new Integer[]{0}, -1);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing in a k value greater
+     * than the length of the input array.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testSubsetKGreaterThanArrSize() {
+        Array.subset(new Integer[]{0}, 2);
+    }
+
+    /**
+     * Tests subsets of an empty array.
+     */
+    @Test
+    public void testSubsetEmptyArray() {
+        Integer[] input = new Integer[0];
+        List<Integer> result = Array.subset(input, 0);
+        Assert.assertEquals(0, result.size());
+    }
+
+    /**
+     * Tests subsets of a single element array.
+     */
+    @Test
+    public void testSubsetSingleElementArray() {
+        Integer[] input = new Integer[]{1};
+        List<Integer> result = Array.subset(input, 0);
+        Assert.assertEquals(0, result.size());
+        result = Array.subset(input, 1);
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(1, (int)result.get(0));
+    }
+
+    /**
+     * Tests subsets of a multi-element array.
+     */
+    @Test
+    public void testSubsetMultiElementArray() {
+        Integer[] input = new Integer[]{1, 2, 3, 4, 5};
+        List<Integer> result = Array.subset(input, 0);
+        Assert.assertEquals(0, result.size());
+
+        // test subsets of size 1 ... input.length
+        for (int i = 1; i <= input.length; i++) {
+            result = Array.subset(input, i);
+            Assert.assertEquals(i, result.size());
+            assertContainsSubsetOfElements(result, 1, 2, 3, 4, 5);
+        }
+    }
+
+    public <T> void assertContainsSubsetOfElements(List<T> subset, T... elements) {
+        Set<T> missing = new HashSet<T>(Arrays.asList(elements));
+        for (int i = 0; i < elements.length; i++) {
+            if (missing.contains(elements[i])) {
+                missing.remove(elements[i]);
+            } else {
+                Assert.fail("subset contains element not found in elements");
+            }
+        }
+    }
 
 }

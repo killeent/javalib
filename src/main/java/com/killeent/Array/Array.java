@@ -577,10 +577,9 @@ public class Array {
      * @throws java.lang.IllegalArgumentException if arr is null.
      * @throws java.lang.IllegalArgumentException if k < 0.
      * @throws java.lang.IllegalArgumentException if k > arr.length.
-     * @return An array containing a subset of size k drawn from arr.
+     * @return An list containing a subset of size k drawn from arr.
      */
-    @SuppressWarnings("unchecked")  // generic array creation
-    public static <T> T[] subset(T[] arr, int k) {
+    public static <T> List<T> subset(T[] arr, int k) {
         if (arr == null) {
             throw new IllegalArgumentException("array is null");
         }
@@ -651,15 +650,16 @@ public class Array {
             } else {
                 // case 4: neither value has previously been changed. Add them both to
                 // the table while swapping
+
                 moved.put(index, arr[resultIndex]);
                 moved.put(resultIndex, arr[index]);
             }
         }
 
         // generate result
-        T[] result = (T []) new Object[k];
+        List<T> result = new LinkedList<T>();
         for (int i = 0; i < k; i++) {
-            result[i] = moved.get(arr.length - 1 - i);
+            result.add(moved.get(arr.length - 1 - i));
         }
 
         return result;
