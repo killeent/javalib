@@ -581,4 +581,8 @@ public class ArrayTest {
      * todo: Tests for {@link com.killeent.Array.Array#permutations(Object[])}.
      */
 
+    /**
+     * todo: Tests for {@link com.killeent.Array.Array#subset(Object[], int)}.
+     */
+
 }

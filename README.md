@@ -33,6 +33,7 @@ Arrays:
 * minimum cover
 * permute in-place
 * generate permutations
+* random subset
 
 Graphs:
 * shortest path (BFS)

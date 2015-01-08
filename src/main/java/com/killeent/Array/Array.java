@@ -568,4 +568,101 @@ public class Array {
         }
     }
 
+    /**
+     * Generates a random subset of size k from the elements in the input array. Does
+     * not modify the input array to do so. Uses O(k) time and space.
+     *
+     * @param arr Array to draw a subset from.
+     * @param k Size of the subset to generate.
+     * @throws java.lang.IllegalArgumentException if arr is null.
+     * @throws java.lang.IllegalArgumentException if k < 0.
+     * @throws java.lang.IllegalArgumentException if k > arr.length.
+     * @return An array containing a subset of size k drawn from arr.
+     */
+    @SuppressWarnings("unchecked")  // generic array creation
+    public static <T> T[] subset(T[] arr, int k) {
+        if (arr == null) {
+            throw new IllegalArgumentException("array is null");
+        }
+        if (k < 0) {
+            throw new IllegalArgumentException("k less than 0");
+        }
+        if (k > arr.length) {
+            throw new IllegalArgumentException(
+                    "k greater than the number of elements in the array");
+        }
+
+        // It is straightforward to generate a subset if we swap the elements
+        // of the input array. However, we would not like to modify it, so
+        // we need some other way of keeping track of the elements that we have
+        // selected for our subset, and those that are still candidates.
+        //
+        // In particular, we use a Hash Table and maintain the following
+        // invariant. Given i = 0 ... arr.length - 1, either:
+        //
+        // The Hash Table does not contain i, and arr[i] is considered
+        // to be the same as it was in the input
+        //
+        // or:
+        //
+        // The Hash Table contains i, and arr[i] is considered to contain
+        // the element that the table maps to
+        //
+        // An example: suppose we have as input arr = [1, 2, 3, 4, 5], k = 2,
+        // and initially an empty table. We generate a random number in the
+        // range 0...4 yielding 2 Then we "swap" the element at arr[2] with
+        // the one at arr[4] by updating the hash table. We then proceed
+        // by generating a random number in the range 0...3 and updating as
+        // necessary.
+        //
+        // At the end, we will loop over the elements at index arr.length - 1
+        // ... arr.length - k to place our subset in an array.
+        Map<Integer, T> moved = new HashMap<Integer, T>();
+        Random rand = new Random();
+
+        for (int i = 0; i < k; i++) {
+            int resultIndex = arr.length - 1 - i;
+            int index = rand.nextInt(arr.length - i);
+
+            if (moved.containsKey(resultIndex) && moved.containsKey(index)) {
+                // case 1: both the swap index and the result index have previously
+                // been swapped. In this case, simply swap the elements they think
+                // they point to:
+
+                T temp = moved.get(index);
+                moved.put(index, moved.get(resultIndex));
+                moved.put(resultIndex, temp);
+            } else if (moved.containsKey(resultIndex)) {
+                // case 2: the value at the result index has previously been changed, but
+                // not at the swap index. Add the swap index to the table while swapping
+                // the elements
+
+                T temp = moved.get(resultIndex);
+                moved.put(index, temp);
+                moved.put(resultIndex, arr[index]);
+            } else if (moved.containsKey(index)) {
+                // case 3: the value at the swap index has previously been changed, but
+                // not at the result index. Add the swap index to the table while swapping
+                // the elements
+
+                T temp = moved.get(index);
+                moved.put(resultIndex, temp);
+                moved.put(index, arr[resultIndex]);
+            } else {
+                // case 4: neither value has previously been changed. Add them both to
+                // the table while swapping
+                moved.put(index, arr[resultIndex]);
+                moved.put(resultIndex, arr[index]);
+            }
+        }
+
+        // generate result
+        T[] result = (T []) new Object[k];
+        for (int i = 0; i < k; i++) {
+            result[i] = moved.get(arr.length - 1 - i);
+        }
+
+        return result;
+    }
+
 }
