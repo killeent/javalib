@@ -182,7 +182,7 @@ public class StringsTest {
     }
 
     /**
-     * todo: add tests for {@link com.killeent.String.Strings#multiply(String, String)}.
+     * Tests for {@link com.killeent.String.Strings#multiply(String, String)}.
      */
 
     /**
@@ -232,25 +232,39 @@ public class StringsTest {
     }
 
     /**
-     * Tests multiplying things by one.
+     * Tests multiplying things by one or negative 1.
      */
     @Test
     public void testMultiplyStringsByOne() {
         Assert.assertEquals("1", Strings.multiply("1", "1"));
+        Assert.assertEquals("-1", Strings.multiply("-1", "1"));
+        Assert.assertEquals("-1", Strings.multiply("1", "-1"));
         Assert.assertEquals("5", Strings.multiply("1", "5"));
         Assert.assertEquals("5", Strings.multiply("5", "1"));
+        Assert.assertEquals("-5", Strings.multiply("-1", "5"));
+        Assert.assertEquals("-5", Strings.multiply("5", "-1"));
         Assert.assertEquals("-10", Strings.multiply("1", "-10"));
         Assert.assertEquals("-10", Strings.multiply("-10", "1"));
     }
-
-    // todo: finish these tests
 
     /**
      * Tests multiplying double negatives yields a positive result.
      */
     @Test
     public void testMultiplyStringsBothNegative() {
+        Assert.assertEquals("1", Strings.multiply("-1", "-1"));
+    }
 
+    /**
+     * Tests a series of different multiplications where a, b != 0, 1, -1.
+     */
+    @Test
+    public void testMultiplyStringsComplex() {
+        Assert.assertEquals("42", Strings.multiply("6", "7"));
+        Assert.assertEquals("-99", Strings.multiply("-11", "9"));
+        Assert.assertEquals("9", Strings.multiply("-3", "-3"));
+        Assert.assertEquals("500", Strings.multiply("50", "10"));
+        Assert.assertEquals("220767269283", Strings.multiply("12381093", "17831"));
     }
 
 }
