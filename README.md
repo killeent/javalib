@@ -49,6 +49,9 @@ Math:
 * binomial coefficient
 * enumerate primes
 
+Specialized:
+* minimize difference of two subsets of integer array
+
 Strings:
 * palindrome
 * Knuth-Morris-Pratt matching

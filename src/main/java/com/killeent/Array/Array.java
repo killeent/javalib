@@ -537,9 +537,13 @@ public class Array {
      * O(k!) where k is the number of unique elements.
      *
      * @param arr The array to permute.
+     * @throws java.lang.IllegalArgumentException if arr is null.
      * @return A set of permutation of arr.
      */
     public static <T> Set<List<T>> permutations(T[] arr) {
+        if (arr == null) {
+            throw new IllegalArgumentException("null array");
+        }
         Set<List<T>> result = new HashSet<List<T>>();
         permutations(arr, 0, result);
         return result;
