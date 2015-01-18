@@ -512,18 +512,23 @@ public class Graphs {
      *                     predecessor in the shortest-path to that vertex from start.
      * @param costs Output parameter that will stores the costs of the shortest paths from
      *              start to non-start vertices.
-     * @throws java.lang.IllegalArgumentException if start, predecessors or costs is null.
+     * @throws java.lang.IllegalArgumentException if g, start, predecessors or costs is null.
+     * @throws java.lang.IllegalArgumentException if start is not in the graph.
      */
     public static <V extends Comparable<V>> void allPairsShortestPaths(
             DirectedGraph<V, Double> g, V start, Map<V, V> predecessors, Map<V, Double> costs) {
-        if (g == null || predecessors == null || costs == null) {
+        if (g == null || start == null || predecessors == null || costs == null) {
             throw new IllegalArgumentException("null arguments to allPairsShortestPaths");
+        }
+        if (!g.containsVertex(start)) {
+            throw new IllegalArgumentException("start not in graph");
         }
 
         // initialize costs
         for (V vertex : g.vertices()) {
             if (vertex.equals(start)) {
                 costs.put(vertex, 0.0);
+                predecessors.put(vertex, null);
             } else {
                 costs.put(vertex, Double.MAX_VALUE);
             }

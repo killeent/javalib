@@ -5,10 +5,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Tests for {@link com.killeent.Graph.Graphs};
@@ -21,6 +18,7 @@ public class GraphsTest {
     private UndirectedGraph<Integer, Integer> undirected;
     private DirectedGraph<Integer, Integer> directed;
     private List<Edge<Integer, Integer>> llInstance;
+    private DirectedGraph<Integer, Double> apspGraph;
 
     @Before
     public void setUp() {
@@ -28,6 +26,7 @@ public class GraphsTest {
         undirected = new UndirectedHashGraph<Integer, Integer>();
         directed = new DirectedHashGraph<Integer, Integer>();
         llInstance = new LinkedList<Edge<Integer, Integer>>();
+        apspGraph = new DirectedHashGraph<Integer, Double>();
     }
 
 
@@ -1002,6 +1001,140 @@ public class GraphsTest {
     }
 
     /**
-     * todo: add tests for {@link com.killeent.Graph.Graphs#allPairsShortestPaths}.
+     * Tests for {@link com.killeent.Graph.Graphs#allPairsShortestPaths}.
      */
+
+/**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing in a null
+     * graph.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAPSPNullGraph() {
+        Graphs.allPairsShortestPaths(
+                null, 0, new HashMap<Integer, Integer>(), new HashMap<Integer, Double>());
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing in a null
+     * start vertex.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAPSPNullStart() {
+        Graphs.allPairsShortestPaths(
+                apspGraph, null, new HashMap<Integer, Integer>(), new HashMap<Integer, Double>());
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing in a null
+     * costs map.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAPSPNullCosts() {
+        apspGraph.addVertex(0);
+        Graphs.allPairsShortestPaths(
+                apspGraph, 0, null, new HashMap<Integer, Double>());
+        apspGraph.clear();
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when passing in a null
+     * predecessors map.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAPSPNullPredecessors() {
+        apspGraph.addVertex(0);
+        Graphs.allPairsShortestPaths(
+                apspGraph, 0, null, new HashMap<Integer, Double>());
+        apspGraph.clear();
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} when start not in the graph.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAPSPStartNotInGraph() {
+        Graphs.allPairsShortestPaths(
+                apspGraph, 0, new HashMap<Integer, Integer>(), new HashMap<Integer, Double>());
+    }
+
+    /**
+     * Tests that All Pairs Shortest Paths works even with negative edge weights.
+     */
+    @Test
+    public void testAPSPNegativeEdges() {
+        apspGraph.addVertex(0);
+        apspGraph.addVertex(1);
+        apspGraph.addVertex(2);
+        apspGraph.addVertex(3);
+
+        apspGraph.addEdge(0, 1, 1.0);
+        apspGraph.addEdge(0, 2, -1.0);
+        apspGraph.addEdge(1, 3, 1.0);
+        apspGraph.addEdge(2, 3, 1.0);
+
+        Map<Integer, Double> costs = new HashMap<Integer, Double>();
+        Map<Integer, Integer> predecessors = new HashMap<Integer, Integer>();
+
+        Graphs.allPairsShortestPaths(apspGraph, 0, predecessors, costs);
+
+        Integer[] expectedPredecessors = new Integer[]{null, 0, 0, 2};
+        Double[] expectedCosts = new Double[] {0.0, 1.0, -1.0, 0.0};
+
+        for (int i = 0; i <= 3; i++) {
+            Assert.assertEquals(expectedPredecessors[i], predecessors.get(i));
+            Assert.assertEquals(expectedCosts[i], costs.get(i));
+        }
+
+        apspGraph.clear();
+    }
+
+    /**
+     * Comprehensive test for All Pairs Shortest Paths. Graph example soured from Sedgewick &
+     * Wayne's Algorithms (4th Edition) - http://algs4.cs.princeton.edu
+     */
+    @Test
+    public void testAPSPComprehensive() {
+        for (int i = 0; i <= 7; i++) {
+            apspGraph.addVertex(i);
+        }
+
+        apspGraph.addEdge(0, 1, 5.0);
+        apspGraph.addEdge(0, 4, 9.0);
+        apspGraph.addEdge(0, 7, 8.0);
+
+        apspGraph.addEdge(1, 2, 12.0);
+        apspGraph.addEdge(1, 3, 15.0);
+        apspGraph.addEdge(1, 7, 4.0);
+
+        apspGraph.addEdge(2, 3, 3.0);
+        apspGraph.addEdge(2, 6, 11.0);
+
+        apspGraph.addEdge(3, 6, 9.0);
+
+        apspGraph.addEdge(4, 5, 4.0);
+        apspGraph.addEdge(4, 6, 20.0);
+        apspGraph.addEdge(4, 7, 5.0);
+
+        apspGraph.addEdge(5, 2, 1.0);
+        apspGraph.addEdge(5, 6, 13.0);
+
+        apspGraph.addEdge(7, 5, 6.0);
+        apspGraph.addEdge(7, 2, 7.0);
+
+        Map<Integer, Double> costs = new HashMap<Integer, Double>();
+        Map<Integer, Integer> predecessors = new HashMap<Integer, Integer>();
+
+        Graphs.allPairsShortestPaths(apspGraph, 0, predecessors, costs);
+
+        Integer[] expectedPredecessors = new Integer[]{null, 0, 5, 2, 0, 4, 2, 0};
+        Double[] expectedCosts = new Double[] {0.0, 5.0, 14.0, 17.0, 9.0, 13.0, 25.0, 8.0};
+
+        for (int i = 0; i <= 7; i++) {
+            Assert.assertEquals(expectedPredecessors[i], predecessors.get(i));
+            Assert.assertEquals(expectedCosts[i], costs.get(i));
+        }
+
+        apspGraph.clear();
+    }
+
 }
