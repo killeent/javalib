@@ -39,6 +39,7 @@ Graphs:
 * shortest path (BFS)
 * shortest path (Djikstra)
 * shortest path (min cost & length)
+* all pairs shortest paths (Bellman-Ford)
 * cycle detection
 * find articulation vertices
 * topological sort (DAG)

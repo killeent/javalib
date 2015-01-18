@@ -1000,4 +1000,8 @@ public class GraphsTest {
 
         directed.clear();
     }
+
+    /**
+     * todo: add tests for {@link com.killeent.Graph.Graphs#allPairsShortestPaths}.
+     */
 }

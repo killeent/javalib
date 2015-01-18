@@ -501,4 +501,50 @@ public class Graphs {
         result.push(candidate);
     }
 
+    /**
+     * Performs the Bellman-Ford algorithm to find the all-pairs shortest paths from the
+     * start vertex to all the other vertices in the Graph. Assumes that the graph does
+     * not contain a negative cycle.
+     *
+     * @param g The graph to compute shortest paths in.
+     * @param start Start vertex to compute shortest paths from.
+     * @param predecessors Output parameter that will map of non-start vertices to their
+     *                     predecessor in the shortest-path to that vertex from start.
+     * @param costs Output parameter that will stores the costs of the shortest paths from
+     *              start to non-start vertices.
+     * @throws java.lang.IllegalArgumentException if start, predecessors or costs is null.
+     */
+    public static <V extends Comparable<V>> void allPairsShortestPaths(
+            DirectedGraph<V, Double> g, V start, Map<V, V> predecessors, Map<V, Double> costs) {
+        if (g == null || predecessors == null || costs == null) {
+            throw new IllegalArgumentException("null arguments to allPairsShortestPaths");
+        }
+
+        // initialize costs
+        for (V vertex : g.vertices()) {
+            if (vertex.equals(start)) {
+                costs.put(vertex, 0.0);
+            } else {
+                costs.put(vertex, Double.MAX_VALUE);
+            }
+        }
+
+        // relax edges n-1 times, where n is the number of vertices in the input graph
+        for (int i = 0; i < g.vertices().size() - 1; i++) {
+            // iterate over all edges in the graph; for any edge (u, v) with weight w,
+            // if the current distance estimate to u from start + w is less than the
+            // current distance estimate to v, update v with the lower estimate and set
+            // u as v's predecessor
+            for (V vertex : g.vertices()) {
+                for (Edge<V, Double> edge : g.neighbors(vertex)) {
+                    double estimate = costs.get(edge.getSource()) + edge.getValue();
+                    if (estimate < costs.get(edge.getDestination())) {
+                        costs.put(edge.getDestination(), estimate);
+                        predecessors.put(edge.getDestination(), edge.getSource());
+                    }
+                }
+            }
+        }
+    }
+
 }
