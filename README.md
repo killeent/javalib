@@ -19,6 +19,7 @@ javalib is a Java Library of Data Structures and Algorithms I have implemented f
 * Thread Pool
 * Timer
 * Bounded Buffer
+* Future
 
 ### Algorithms:
 
