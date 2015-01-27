@@ -21,6 +21,7 @@ javalib is a Java Library of Data Structures and Algorithms I have implemented f
 * Bounded Buffer
 * Future
 * Hash Table
+* Thread-safe LRU Cache
 
 ### Algorithms:
 
