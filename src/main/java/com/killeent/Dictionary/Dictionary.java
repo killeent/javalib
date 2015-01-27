@@ -59,4 +59,9 @@ public interface Dictionary<K,V> {
      */
     public int size();
 
+    /**
+     * Clears the contents of the dictionary.
+     */
+    public void clear();
+
 }

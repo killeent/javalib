@@ -20,6 +20,7 @@ javalib is a Java Library of Data Structures and Algorithms I have implemented f
 * Timer
 * Bounded Buffer
 * Future
+* Hash Table
 
 ### Algorithms:
 

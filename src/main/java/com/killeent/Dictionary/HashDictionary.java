@@ -23,7 +23,7 @@ public class HashDictionary<K,V> implements Dictionary<K,V> {
     private static final float DEFAULT_LOAD_FACTOR = 1.0f;
 
     // tracks the primes less than the size of our table
-    private final List<Integer> primes = Arrays.asList(2, 3, 5, 7, 11, 13, 17);
+    private List<Integer> primes = Arrays.asList(2, 3, 5, 7, 11, 13, 17);
 
     // we need to store key-value pairs in our tables so let's make a class to do so
     private static class Entry<K,V>
@@ -38,7 +38,7 @@ public class HashDictionary<K,V> implements Dictionary<K,V> {
     }
 
     // the table itself
-    private List<Entry<K,V>>[] table;
+    private LinkedList<Entry<K,V>>[] table;
 
     // number of elements in the table
     private int count;
@@ -49,7 +49,7 @@ public class HashDictionary<K,V> implements Dictionary<K,V> {
      */
     @SuppressWarnings("unchecked")  // generic array creation
     public HashDictionary() {
-        table = (List<Entry<K,V>>[]) new Object[DEFAULT_INITIAL_SIZE];
+        table = (LinkedList<Entry<K,V>>[]) new LinkedList[DEFAULT_INITIAL_SIZE];
         count = 0;
     }
 
@@ -59,7 +59,13 @@ public class HashDictionary<K,V> implements Dictionary<K,V> {
             throw new IllegalArgumentException("null args");
         }
 
-        List<Entry<K,V>> bucket = table[hash(key)];
+        LinkedList<Entry<K,V>> bucket = table[hash(key)];
+
+        if (bucket == null) {
+            bucket = new LinkedList<Entry<K, V>>();
+            table[hash(key)] = bucket;
+        }
+
         for (Entry<K,V> entry : bucket) {
             if (entry.key.equals(key)) {
                 // simply update the value
@@ -93,18 +99,22 @@ public class HashDictionary<K,V> implements Dictionary<K,V> {
      */
     @SuppressWarnings("unchecked")  // generic array creation
     private void resizeIfNecessary() {
-        if (count / (1.0) > DEFAULT_LOAD_FACTOR) {
+        if (count * 1.0 / table.length > DEFAULT_LOAD_FACTOR) {
             int size = calculateDoublePrime(table.length);
             if (size == -1) {
                 // we are at our maximum table size
                 return;
             }
 
-            List<Entry<K,V>>[] copy = (List<Entry<K,V>>[]) new Object[size];
+            LinkedList<Entry<K,V>>[] copy = (LinkedList<Entry<K,V>>[]) new LinkedList[size];
 
             // we need to rehash every key-value pair in the existing table
             for (int i = 0; i < table.length; i++) {
                 for (Entry<K,V> entry : table[i]) {
+                    int index = hash(entry.key);
+                    if (copy[index] == null) {
+                        copy[index] = new LinkedList<Entry<K, V>>();
+                    }
                     copy[hash(entry.key)].add(entry);
                 }
             }
@@ -183,6 +193,11 @@ public class HashDictionary<K,V> implements Dictionary<K,V> {
         }
 
         List<Entry<K,V>> bucket = table[hash(key)];
+
+        if (bucket == null) {
+            return null;
+        }
+
         for (Entry<K,V> entry : bucket) {
             if (entry.key.equals(key)) {
                 return entry.value;
@@ -196,11 +211,17 @@ public class HashDictionary<K,V> implements Dictionary<K,V> {
         if (key == null) {
             throw new IllegalArgumentException("null key");
         }
-        
+
         List<Entry<K,V>> bucket = table[hash(key)];
+
+        if (bucket == null) {
+            return false;
+        }
+
         for (int i = 0; i < bucket.size(); i++) {
             if (bucket.get(i).key.equals(key)) {
                 bucket.remove(i);
+                count--;
                 return true;
             }
         }
@@ -211,8 +232,10 @@ public class HashDictionary<K,V> implements Dictionary<K,V> {
     public Set<K> keySet() {
         Set<K> result = new HashSet<K>(count);
         for (int i = 0; i < table.length; i++) {
-            for (Entry<K,V> entry : table[i]) {
-                result.add(entry.key);
+            if (table[i] != null) {
+                for (Entry<K,V> entry : table[i]) {
+                    result.add(entry.key);
+                }
             }
         }
         return Collections.unmodifiableSet(result);
@@ -221,5 +244,15 @@ public class HashDictionary<K,V> implements Dictionary<K,V> {
     @Override
     public int size() {
         return count;
+    }
+
+    @Override
+    public void clear() {
+        for (int i = 0; i < table.length; i++) {
+            if (table[i] != null) {
+                table[i].clear();
+            }
+        }
+        count = 0;
     }
 }
