@@ -72,12 +72,10 @@ public class ConcurrentLRUCache<K,V> {
      * @param val The val.
      */
     public synchronized void add(@NonNull K key, @NonNull V val) {
-        if (cache.size() == maxCapacity) {
+        if (cache.size() == maxCapacity && !cache.containsKey(key)) {
             evictItem();
         }
-        if (cache.containsKey(key)) {
-            removeNodeFromList(cache.get(key));
-        }
+        remove(key);
         cache.put(key, insertLinkedList(key, val));
     }
 
@@ -89,7 +87,13 @@ public class ConcurrentLRUCache<K,V> {
      * @return The value associated with the key, or null if it does not exist.
      */
     public synchronized V get(@NonNull K key) {
-        return cache.containsKey(key) ? cache.get(key).data : null;
+        if (cache.containsKey(key)) {
+            V value = cache.get(key).data;
+            remove(key);
+            add(key, value);
+            return value;
+        }
+        return null;
     }
 
     /**
@@ -104,7 +108,16 @@ public class ConcurrentLRUCache<K,V> {
             return false;
         }
         removeNodeFromList(cache.get(key));
+        cache.remove(key);
         return true;
+    }
+
+    /**
+     * Clears the contents of the cache.
+     */
+    public synchronized void clear() {
+        head = tail = null;
+        cache.clear();
     }
 
     /**
@@ -139,10 +152,11 @@ public class ConcurrentLRUCache<K,V> {
      * returns a reference to it.
      */
     private synchronized ListNode insertLinkedList(K key, V val) {
-        if (head == tail) {
+        if (head == null && tail == null) {
             head = tail = new ListNode(null, null, key, val);
         } else {
             head = new ListNode(null, head, key, val);
+            head.next.prev = head;
         }
         return head;
     }
