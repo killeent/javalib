@@ -15,6 +15,7 @@ public interface Dictionary<K,V> {
      *
      * @param key The key to add.
      * @param val The value associated with the key.
+     * @throws java.lang.IllegalArgumentException if key or val is NULL.
      */
     public void add(K key, V val);
 
@@ -22,6 +23,7 @@ public interface Dictionary<K,V> {
      * Tests whether the specified key is in the dictionary.
      *
      * @param key The key to look for.
+     * @throws java.lang.IllegalArgumentException if key is NULL.
      * @return True if key is in the dictionary, otherwise false.
      */
     public boolean containsKey(K key);
@@ -30,6 +32,7 @@ public interface Dictionary<K,V> {
      * Gets the value associated with the specified key.
      *
      * @param key The key associated with the value.
+     * @throws java.lang.IllegalArgumentException if key is NULL.
      * @return The value associated with the key, or NULL if the key is not
      * in the dictionary.
      */
@@ -40,6 +43,7 @@ public interface Dictionary<K,V> {
      * exits.
      *
      * @param key The key in the key-value pair.
+     * @throws java.lang.IllegalArgumentException if key is null.
      * @return True if the key-value pair was removed, or false if the key
      * was not in the dictionary.
      */
@@ -51,7 +55,7 @@ public interface Dictionary<K,V> {
     public Set<K> keySet();
 
     /**
-     * @return The number of elements in the dictionary. 
+     * @return The number of elements in the dictionary.
      */
     public int size();
 
