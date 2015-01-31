@@ -88,7 +88,7 @@ public class ReadersWriterLock {
             waitingReaders++;
             Thread curr = Thread.currentThread();
             // check and see if we already hold the lock
-            if (!readers.containsKey(curr) && !curr.equals(writer)) {
+            if (!doIHoldReadLock() && !doIHoldWriteLock()) {
                 // wait on the following conditions:
                 // 1. There is an active writer
                 // 2. There is a waiting writer, and the last operation was a read
@@ -110,7 +110,7 @@ public class ReadersWriterLock {
     /**
      * @return True if the current thread holds the lock for reading, otherwise false.
      */
-    private boolean doIHoldReadLock() {
+    public boolean doIHoldReadLock() {
         synchronized (lock) {
             return readers.containsKey(Thread.currentThread());
         }
@@ -124,16 +124,17 @@ public class ReadersWriterLock {
      */
     public void releaseRead() {
         synchronized (lock) {
-            Thread curr = Thread.currentThread();
-            if (!readers.containsKey(curr)) {
+            if (!doIHoldReadLock()) {
                 throw new IllegalMonitorStateException("Thread does not hold lock");
             }
 
+            Thread curr = Thread.currentThread();
+
             activeReaders--;
+            readers.put(curr, readers.get(curr) - 1);
+            // check and see if we need to remove ourself from the reader list
             if (readers.get(curr) == 0) {
                 readers.remove(curr);
-            } else {
-                readers.put(curr, readers.get(curr) - 1);
             }
 
             if (activeReaders == 0) {
@@ -156,15 +157,15 @@ public class ReadersWriterLock {
      */
     public void acquireWrite() {
         synchronized (lock) {
-            waitingWriters++;
-            Thread curr = Thread.currentThread();
-
-            if (readers.containsKey(curr)) {
+            if (doIHoldReadLock() && !doIHoldWriteLock()) {
                 throw new IllegalStateException("read lock trying to acquire lock for writing");
             }
 
+            waitingWriters++;
+            Thread curr = Thread.currentThread();
+
             // check and see if we already hold the lock
-            if (!curr.equals(writer)) {
+            if (!doIHoldWriteLock()) {
                 // wait on the following conditions:
                 // 1. there are active readers
                 // 2. there is an active writer
@@ -189,7 +190,7 @@ public class ReadersWriterLock {
     /**
      * @return True if the current thread holds the lock for writing, otherwise false.
      */
-    private boolean doIHoldWriteLock() {
+    public boolean doIHoldWriteLock() {
         synchronized (lock) {
             return Thread.currentThread().equals(writer);
         }
@@ -204,7 +205,7 @@ public class ReadersWriterLock {
     public void releaseWrite() {
         synchronized (lock) {
             Thread curr = Thread.currentThread();
-            if (!curr.equals(writer)) {
+            if (!doIHoldWriteLock()) {
                 throw new IllegalMonitorStateException("thread does not hold lock");
             }
             activeWriters--;
