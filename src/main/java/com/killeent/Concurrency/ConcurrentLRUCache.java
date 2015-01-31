@@ -1,7 +1,5 @@
 package com.killeent.Concurrency;
 
-import com.sun.javafx.beans.annotations.NonNull;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +29,7 @@ public class ConcurrentLRUCache<K,V> {
         public K key;
         public V data;
 
-        public ListNode(ListNode prev, ListNode next, @NonNull K key, @NonNull V data) {
+        public ListNode(ListNode prev, ListNode next, K key, V data) {
             this.prev = prev;
             this.next = next;
             this.key = key;
@@ -71,7 +69,7 @@ public class ConcurrentLRUCache<K,V> {
      * @param key The key.
      * @param val The val.
      */
-    public synchronized void add(@NonNull K key, @NonNull V val) {
+    public synchronized void add(K key, V val) {
         if (cache.size() == maxCapacity && !cache.containsKey(key)) {
             evictItem();
         }
@@ -86,7 +84,7 @@ public class ConcurrentLRUCache<K,V> {
      * @param key The key of the item.
      * @return The value associated with the key, or null if it does not exist.
      */
-    public synchronized V get(@NonNull K key) {
+    public synchronized V get(K key) {
         if (cache.containsKey(key)) {
             V value = cache.get(key).data;
             remove(key);
@@ -103,7 +101,7 @@ public class ConcurrentLRUCache<K,V> {
      * @param key The key of the item.
      * @return True if the item exits in the cache and was remove, otherwise false.
      */
-    public synchronized boolean remove(@NonNull K key) {
+    public synchronized boolean remove(K key) {
         if (!cache.containsKey(key)) {
             return false;
         }
