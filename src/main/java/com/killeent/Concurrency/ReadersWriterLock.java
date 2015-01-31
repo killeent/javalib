@@ -83,7 +83,7 @@ public class ReadersWriterLock {
     /**
      * Acquires the lock for reading.
      */
-    public void acquireRead() throws InterruptedException {
+    public void acquireRead() {
         synchronized (lock) {
             waitingReaders++;
             Thread curr = Thread.currentThread();
@@ -92,8 +92,8 @@ public class ReadersWriterLock {
                 // wait on the following conditions:
                 // 1. There is an active writer
                 // 2. There is a waiting writer, and the last operation was a read
-                while (activeWriters > 0 && (waitingWriters > 0 && lastOpWasRead)) {
-                    readerWaitCV.await();
+                while (activeWriters > 0 || (waitingWriters > 0 && lastOpWasRead)) {
+                    readerWaitCV.awaitUninterruptibly();
                 }
             }
             lastOpWasRead = true;
@@ -128,15 +128,22 @@ public class ReadersWriterLock {
             if (!readers.containsKey(curr)) {
                 throw new IllegalMonitorStateException("Thread does not hold lock");
             }
+
             activeReaders--;
             if (readers.get(curr) == 0) {
                 readers.remove(curr);
             } else {
                 readers.put(curr, readers.get(curr) - 1);
             }
-            // if there are any waiting writers, notify them
-            if (waitingWriters > 0) {
-                writerWaitCV.notifyAll();
+
+            if (activeReaders == 0) {
+                // if there are any waiting writers, notify them
+                if (waitingWriters > 0) {
+                    writerWaitCV.notifyAll();
+                } else if (waitingReaders > 0) {
+                    // sanity check -> i don't think this should ever happen
+                    readerWaitCV.notifyAll();
+                }
             }
         }
     }
@@ -148,6 +155,35 @@ public class ReadersWriterLock {
      * reading.
      */
     public void acquireWrite() {
+        synchronized (lock) {
+            waitingWriters++;
+            Thread curr = Thread.currentThread();
+
+            if (readers.containsKey(curr)) {
+                throw new IllegalStateException("read lock trying to acquire lock for writing");
+            }
+
+            // check and see if we already hold the lock
+            if (!curr.equals(writer)) {
+                // wait on the following conditions:
+                // 1. there are active readers
+                // 2. there is an active writer
+                // 3. there are waiting readers and the last op was a write
+                // 4. we are not the first writer in the queue
+                waitingWriterQueue.add(curr);
+                while (activeReaders > 0
+                        || activeWriters > 0
+                        || (waitingReaders > 0 && !lastOpWasRead)
+                        || !curr.equals(waitingWriterQueue.peek())) {
+                    writerWaitCV.awaitUninterruptibly();
+                }
+                waitingWriterQueue.remove();
+            }
+            lastOpWasRead = false;
+            writer = curr;
+            waitingWriters--;
+            activeWriters++;
+        }
     }
 
     /**
@@ -166,7 +202,23 @@ public class ReadersWriterLock {
      * the lock.
      */
     public void releaseWrite() {
-
+        synchronized (lock) {
+            Thread curr = Thread.currentThread();
+            if (!curr.equals(writer)) {
+                throw new IllegalMonitorStateException("thread does not hold lock");
+            }
+            activeWriters--;
+            if (activeWriters == 0) {
+                writer = null;
+                // if there are any waiting readers, notify them
+                if (waitingReaders > 0) {
+                    readerWaitCV.notifyAll();
+                } else if (waitingWriters > 0) {
+                    // otherwise, notify any waiting writers
+                    writerWaitCV.notifyAll();
+                }
+            }
+        }
     }
 
 }
