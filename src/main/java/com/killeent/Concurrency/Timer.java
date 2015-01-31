@@ -102,6 +102,11 @@ public class Timer {
                             emptyQueueCV.await();
                         }
 
+                        // check to see if canceled
+                        if (canceled) {
+                            break;
+                        }
+
                         // otherwise, wait for the next tasks execution time
                         // to be equal to the current time
                         long diff = tasks.peek().getExecutionTime() - System.currentTimeMillis();
