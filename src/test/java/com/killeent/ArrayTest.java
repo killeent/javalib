@@ -663,4 +663,12 @@ public class ArrayTest {
         }
     }
 
+    /**
+     * todo: tests for {@link com.killeent.Array.Array#rotate(Object[], int)}.
+     */
+
+    /**
+     * todo: tests for {@link com.killeent.Array.Array#reverse(Object[], int, int)}.
+     */
+
 }

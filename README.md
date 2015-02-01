@@ -38,6 +38,8 @@ Arrays:
 * permute in-place
 * generate permutations
 * random subset
+* rotate
+* reverse
 
 Graphs:
 * shortest path (BFS)

@@ -669,4 +669,47 @@ public class Array {
         return result;
     }
 
+    /**
+     * Rotates the specified array by c positions, in-place. For example, if arr = [1, 2, 3]
+     * and c = 2, then we get [2, 3, 1].
+     *
+     * @param arr array to rotate.
+     * @param c amount to rotate
+     * @throws java.lang.IllegalArgumentException if arr is null.
+     */
+    public static <T> void rotate(T[] arr, int c) {
+        if (arr == null) {
+            throw new IllegalArgumentException();
+        }
+        c %= arr.length;
+        reverse(arr, 0, arr.length - 1);
+        reverse(arr, 0, c);
+        reverse(arr, c, arr.length - 1);
+    }
+
+    /**
+     * Reverses the elements in the array from positions lo...hi inclusively.
+     * For example, if arr = [1, 2, 3, 4] and lo, hi = 0, 3 respectively, yields
+     * [4, 3, 2, 1].
+     *
+     * @param arr array to reverse.
+     * @param lo lo (inclusive) index of range of array to reverse.
+     * @param hi hi (inclusive) index of range of array to reverse.
+     * @throws java.lang.IllegalArgumentException if arr is null.
+     * @throws java.lang.IllegalArgumentException if hi < lo.
+     */
+    public static <T> void reverse(T[] arr, int lo, int hi) {
+        if (arr == null) {
+            throw new IllegalArgumentException("arr is null");
+        }
+        if (hi < lo) {
+            throw new IllegalArgumentException("hi < lo");
+        }
+        while (lo < hi) {
+            swap(arr, lo, hi);
+            lo++;
+            hi--;
+        }
+    }
+
 }
