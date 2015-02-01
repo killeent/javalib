@@ -664,11 +664,120 @@ public class ArrayTest {
     }
 
     /**
-     * todo: tests for {@link com.killeent.Array.Array#rotate(Object[], int)}.
+     * Tests for {@link com.killeent.Array.Array#rotate(Object[], int)}.
      */
 
     /**
-     * todo: tests for {@link com.killeent.Array.Array#reverse(Object[], int, int)}.
+     * Tests for {@link java.lang.IllegalArgumentException} if arr is null.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testRotateNullArray() {
+        Array.rotate(null, 1);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if c < 0.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testRotateNegativeC() {
+        Array.rotate(new Integer[]{1}, -1);
+    }
+
+    /**
+     * Tests rotating a single element array.
+     */
+    @Test
+    public void testRotateSingleElementArray() {
+        Integer[] input = new Integer[]{1};
+        Integer[] expected = new Integer[]{1};
+        for (int i = 0; i < 5; i++) {
+            Array.rotate(input, i);
+            Assert.assertEquals(expected, input);
+        }
+    }
+
+    /**
+     * Tests rotating a multi-element array.
+     */
+    @Test
+    public void testRotateMultiElementArray() {
+        Integer[][] expected = new Integer[][]{
+                new Integer[]{1, 2, 3, 4, 5},
+                new Integer[]{5, 1, 2, 3, 4},
+                new Integer[]{4, 5, 1, 2, 3},
+                new Integer[]{3, 4, 5, 1, 2},
+                new Integer[]{2, 3, 4, 5, 1},
+                new Integer[]{1, 2, 3, 4, 5},
+        };
+        for (int i = 0; i < expected.length; i++) {
+            Integer[] actual = new Integer[]{1, 2, 3, 4, 5};
+            Array.rotate(actual, i);
+            Assert.assertEquals(expected[i], actual);
+        }
+    }
+
+    /**
+     * Tests for {@link com.killeent.Array.Array#reverse(Object[], int, int)}.
      */
 
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if arr is null.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testReverseNullArray() {
+        Array.reverse(null, 0, 1);
+    }
+
+    /**
+     * Tests for {@link java.lang.IllegalArgumentException} if arr is lo > hi.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testReverseLoGreaterThanHiArray() {
+        Array.reverse(new Integer[]{1}, 1, 0);
+    }
+
+    /**
+     * Tests reversing a single element array.
+     */
+    @Test
+    public void testReverseSingleElementArray() {
+        Integer[] input = new Integer[]{1};
+        Integer[] expected = new Integer[]{1};
+        Array.reverse(input, 0, input.length - 1);
+        Assert.assertEquals(expected, input);
+    }
+
+    /**
+     * Tests reversing an even length array.
+     */
+    @Test
+    public void testReverseEvenLengthArray() {
+        Integer[] input = new Integer[]{1, 2};
+        Integer[] expected = new Integer[]{2, 1};
+        Array.reverse(input, 0, input.length - 1);
+        Assert.assertEquals(expected, input);
+    }
+
+    /**
+     * Tests reversing an even length array.
+     */
+    @Test
+    public void testReverseOddLengthArray() {
+        Integer[] input = new Integer[]{1, 2, 3};
+        Integer[] expected = new Integer[]{3, 2, 1};
+        Array.reverse(input, 0, input.length - 1);
+        Assert.assertEquals(expected, input);
+    }
+
+    /**
+     * Tests reversing subsets of an array.
+     */
+    @Test
+    public void testReverseArraySubsets() {
+        Integer[] input = new Integer[]{1, 2, 3, 4, 5};
+        Integer[] expected = new Integer[]{2, 1, 5, 4, 3};
+        Array.reverse(input, 0, 1);
+        Array.reverse(input, 2, input.length - 1);
+        Assert.assertEquals(expected, input);
+    }
 }

@@ -676,15 +676,21 @@ public class Array {
      * @param arr array to rotate.
      * @param c amount to rotate
      * @throws java.lang.IllegalArgumentException if arr is null.
+     * @throws java.lang.IllegalArgumentException if c < 0.
      */
     public static <T> void rotate(T[] arr, int c) {
         if (arr == null) {
             throw new IllegalArgumentException();
         }
+        if (c < 0) {
+            throw new IllegalArgumentException();
+        }
         c %= arr.length;
-        reverse(arr, 0, arr.length - 1);
-        reverse(arr, 0, c);
-        reverse(arr, c, arr.length - 1);
+        if (c != 0) {
+            reverse(arr, 0, arr.length - 1);
+            reverse(arr, 0, c - 1);
+            reverse(arr, c, arr.length - 1);
+        }
     }
 
     /**
