@@ -1,5 +1,6 @@
 package com.killeent.Math;
 
+import java.math.BigInteger;
 import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -94,29 +95,34 @@ public class Math {
      * @throws java.lang.IllegalArgumentException if n or k is negative.
      * @return The binomial coefficient (n choose k).
      */
-    public static long binomialCoefficient(int n, int k) {
+    public static BigInteger binomialCoefficient(int n, int k) {
         if (k < 0 || n < 0) {
             throw new IllegalArgumentException("values must be positive");
         }
 
         // return quickly if k > n OR k == n
         if (k > n) {
-            return 0;
+            return BigInteger.ZERO;
         } else if (k == n) {
-            return 1;
+            return BigInteger.ONE;
         }
 
-        long[][] matrix = new long[n+1][k+1];
+        // pick the lowest equivalent value of k ((n choose k) == (n choose n-k))
+        if (n - k < k) {
+            k = n-k;
+        }
+
+        BigInteger[][] matrix = new BigInteger[n+1][k+1];
 
         // n choose 0 is 1 for any value of n
         for (int i = 0; i <= n; i++) {
-            matrix[i][0] = 1;
+            matrix[i][0] = BigInteger.ONE;
         }
 
         // n choose k is 0 if n < k
         for (int i = 0; i <= n; i++) {
             for (int j = i+1; j <= k; j++) {
-                matrix[i][j] = 0;
+                matrix[i][j] = BigInteger.ZERO;
             }
         }
 
@@ -124,7 +130,7 @@ public class Math {
         // along with dynamic programming to calculate our results incrementally
         for (int kval = 1; kval <= k; kval++) {
             for (int nval = 1; nval <= n; nval++) {
-                matrix[nval][kval] = matrix[nval-1][kval-1] + matrix[nval-1][kval];
+                matrix[nval][kval] = matrix[nval-1][kval-1].add(matrix[nval-1][kval]);
             }
         }
 
