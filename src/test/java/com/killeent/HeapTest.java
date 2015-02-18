@@ -35,7 +35,7 @@ public class HeapTest {
         Assert.assertNull(heap.peek());
     }
 
-    // tests that we return remove when trying to peek the highest priority element
+    // tests that we return null when trying to remove the highest priority element
     // from the heap
     @Test
     public void testEmptyHeapRemove() {
